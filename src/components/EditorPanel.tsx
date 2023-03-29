@@ -3,16 +3,12 @@ import MappingContext from '../contexts/MappingContext';
 import { ValueOf } from '../util/TypeUtil';
 import CodeEditor from './CodeEditor';
 
-export interface EditorPanelProps {
-
-}
-
 const views = {
   code: 'code',
   gui: 'gui',
 }
 
-function EditorPanel({ }: EditorPanelProps) {
+function EditorPanel() {
   const { mapping, setMapping } = useContext(MappingContext);
   const [view, setView] = useState<ValueOf<typeof views>>(views.code);
 
@@ -30,7 +26,7 @@ function EditorPanel({ }: EditorPanelProps) {
     } catch (error: unknown) {
       console.log('The mapping has an error');
     }
-  }, []);
+  }, [setMapping]);
 
   return (
     <div className='RML-Editor-Mapping-Editor'>

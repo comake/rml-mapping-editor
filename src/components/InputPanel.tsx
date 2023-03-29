@@ -1,8 +1,4 @@
-export interface InputPanelProps {
-
-}
-
-function InputPanel({ }: InputPanelProps) {
+function InputPanel() {
   return (
     <div className='RML-Editor-Panel RML-Editor-Input-Panel'>
 
