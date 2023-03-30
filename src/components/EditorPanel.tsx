@@ -5,14 +5,16 @@ import CodeEditor from './CodeEditor';
 
 const views = {
   code: 'code',
-  gui: 'gui',
+  form: 'form',
+  dnd: 'dnd',
 }
 
 function EditorPanel() {
   const { mapping, setMapping } = useContext(MappingContext);
   const [view, setView] = useState<ValueOf<typeof views>>(views.code);
 
-  const changeToGuiView = useCallback(() => setView(views.gui), []);
+  const changeToDndView = useCallback(() => setView(views.dnd), []);
+  const changeToFormView = useCallback(() => setView(views.form), []);
   const changeToCodeView = useCallback(() => setView(views.code), []);
 
   const code = useMemo(() => {
@@ -31,7 +33,8 @@ function EditorPanel() {
   return (
     <div className='RML-Editor-Mapping-Editor'>
       <div className='RML-Editor-Panel-Header'>
-        <button onClick={changeToGuiView}>GUI</button>
+        <button onClick={changeToDndView}>Drag & Drop</button>
+        <button onClick={changeToFormView}>Form</button>
         <button onClick={changeToCodeView}>Code</button>
       </div>
       { view === views.code && (
