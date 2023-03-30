@@ -1,7 +1,8 @@
 <div align="center">
   <h1>RML Mapping Editor</h1>
   <p>
-    A no-code, easy to use interface for building and editing [RML](https://rml.io/) mappings.
+    A no-code, easy to use interface for building and editing <a href='https://rml.io/
+    ' target='_blank'>RML</a> mappings.
   </p>
 </div>
 
