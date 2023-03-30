@@ -35,7 +35,7 @@ git clone https://github.com/comake/rml-mapping-editor.git
 cd rml-mapping-editor
 ```
 
-Although this module is just a React Component, the repo comes with webpack-dev-server installed so that you can run and test it out locally. Just run:
+Although this module is just a React Component, the repo comes with webpack-dev-server installed so that you can test it out locally. Just run:
 
 ```console
 npm install
