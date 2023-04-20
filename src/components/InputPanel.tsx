@@ -9,7 +9,6 @@ function InputPanel() {
   const [prevInputType, setPrevInputType] = useState(inputType);
 
   const changeToJSONInput = useCallback(() => setInputType(INPUT_TYPES.json), [setInputType]);
-  const changeToCSVInput = useCallback(() => setInputType(INPUT_TYPES.csv), [setInputType]);
   const changeToXMLInput = useCallback(() => setInputType(INPUT_TYPES.xml), [setInputType]);
 
   useEffect(() => {
@@ -23,7 +22,6 @@ function InputPanel() {
     <div className={styles.inputPanel}>
       <div className={styles.panelHeader}>
         <button onClick={changeToJSONInput}>JSON</button>
-        <button onClick={changeToCSVInput}>CSV</button>
         <button onClick={changeToXMLInput}>XML</button>
       </div>
       <div className={styles.inputSourceName}>Source name: {INPUT_FILE_NAME_BY_TYPE[inputType]}</div>
