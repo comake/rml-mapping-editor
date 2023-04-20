@@ -1,23 +1,24 @@
 import { useCallback, useContext } from 'react';
-import ThemeContext from '../contexts/ThemeContext';
+import ThemeContext, { THEMES } from '../contexts/ThemeContext';
 import { ReactComponent as SunIcon } from '../images/sun.svg';
 import { ReactComponent as MoonIcon } from '../images/moon.svg';
+import styles from '../css/RMLMappingEditor.module.scss';
 
 
 function ThemeToggle() {
   const { theme, setTheme } = useContext(ThemeContext);
 
   const toggleTheme = useCallback(() => {
-    if (theme === 'dark') {
-      setTheme('light');
+    if (theme === THEMES.dark) {
+      setTheme(THEMES.light);
     } else {
-      setTheme('dark');
+      setTheme(THEMES.dark);
     }
   }, [setTheme, theme]);
   
   return (
-    <button onClick={toggleTheme} className='RML-Editor-Theme-Toggle RML-Editor-Centered'>
-      { theme === 'dark' ? <SunIcon /> : <MoonIcon /> }
+    <button onClick={toggleTheme} className={styles.themeToggle}>
+      { theme === THEMES.dark ? <SunIcon /> : <MoonIcon /> }
     </button>
   )
 }

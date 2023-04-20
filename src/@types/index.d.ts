@@ -6,3 +6,6 @@ declare module "*.svg" {
 }
 
 declare module 'reportWebVitals';
+
+declare module '*.module.css';
+declare module '*.module.scss';

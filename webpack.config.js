@@ -3,6 +3,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 const path = require( 'path' );
 const fs = require('fs');
+const webpack = require('webpack');
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
@@ -14,6 +15,7 @@ const publicUrl = getPublicUrlOrPath(
 );
 
 module.exports = {
+  target: 'web',
   context: __dirname,
   entry: './public/index.tsx',
   output: {
@@ -22,10 +24,19 @@ module.exports = {
     publicPath: publicUrl,
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx'],
+    fallback: {
+      'stream': require.resolve('stream-browserify'),
+    }
   },
   module: {
     rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
       {
         test: /\.tsx?$/,
         loader: 'babel-loader',
@@ -47,7 +58,13 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [
           "style-loader",
-          "css-loader",
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              modules: true,
+            }
+          },
           "sass-loader",
         ],
       },
@@ -92,6 +109,19 @@ module.exports = {
       PUBLIC_URL: publicUrl.slice(0, -1),
       // You can pass any key-value pairs, this was just an example.
       // WHATEVER: 42 will replace %WHATEVER% with 42 in index.html.
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
     })
-  ]
+  ],
+  ignoreWarnings: [
+    function ignoreSourcemapsloaderWarnings(warning) {
+      return (
+        warning.module &&
+        warning.module.resource.includes("node_modules") &&
+        warning.details &&
+        warning.details.includes("source-map-loader")
+      );
+    },
+  ],
 };

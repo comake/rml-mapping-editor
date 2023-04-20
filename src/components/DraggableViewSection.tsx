@@ -1,5 +1,6 @@
 import { DragEvent, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 import { OrArray } from '../util/TypeUtil';
+import styles from '../css/RMLMappingEditor.module.scss';
 
 const DRAG_HOVER_TIMEOUT_DURATION = 380;
 
@@ -72,13 +73,13 @@ function DraggableViewSection({ children, offset, dimension, vertical, dimension
   ), [dimensionsComputed, vertical, dimension, offset]);
 
   return (
-    <div className={`Draggable-View-Section ${isDragging ? 'dragging' : ''} ${hasLongHovered ? 'drag-handle-long-hover' : ''}`} style={style}>
+    <div className={`${styles.draggableViewSection} ${isDragging ? styles.dragging : ''} ${hasLongHovered ? styles.dragHandleLongHover : ''}`} style={style}>
       {children}
       { !isLast && (
         <div 
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          className='Drag-Handle'
+          className={styles.dragHandle}
           draggable='true'
           onDrag={handleDrag}
           onDragStart={handleDragStart}

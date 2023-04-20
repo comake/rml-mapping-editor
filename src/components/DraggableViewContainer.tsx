@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FixedLengthArray } from '../util/TypeUtil';
 import DraggableViewSection from './DraggableViewSection';
+import styles from '../css/RMLMappingEditor.module.scss';
 
 const MINIMUM_DIMENSION = 130;
 
@@ -45,7 +46,7 @@ function DraggableViewContainer<T extends number>({
 
   const classes = useMemo(() => {
     return [
-      'Draggable-View-Container', 
+      styles.draggableViewContainer, 
       vertical ? 'vertical' : 'horizonatal', 
       ...additionalClasses
     ].join(' ')

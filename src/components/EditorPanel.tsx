@@ -2,6 +2,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import MappingContext from '../contexts/MappingContext';
 import { ValueOf } from '../util/TypeUtil';
 import CodeEditor from './CodeEditor';
+import styles from '../css/RMLMappingEditor.module.scss';
 
 const views = {
   code: 'code',
@@ -10,7 +11,7 @@ const views = {
 }
 
 function EditorPanel() {
-  const { mapping, setMapping } = useContext(MappingContext);
+  const { mapping, setMapping, mappingError } = useContext(MappingContext);
   const [view, setView] = useState<ValueOf<typeof views>>(views.code);
 
   const changeToDndView = useCallback(() => setView(views.dnd), []);
@@ -31,8 +32,8 @@ function EditorPanel() {
   }, [setMapping]);
 
   return (
-    <div className='RML-Editor-Mapping-Editor'>
-      <div className='RML-Editor-Panel-Header'>
+    <div className={styles.mappingEditor}>
+      <div className={styles.panelHeader}>
         <button onClick={changeToDndView}>Drag & Drop</button>
         <button onClick={changeToFormView}>Form</button>
         <button onClick={changeToCodeView}>Code</button>
@@ -41,9 +42,12 @@ function EditorPanel() {
         <CodeEditor 
           code={code}
           onChange={updateMapping}
-          classes={'RML-Editor-Mapping-Editor-Code-View'}
+          classes={styles.mappingEditorCodeView}
         />
       )}
+      <div className={styles.mappingError}>
+        { mappingError ? `Mapping error: ${mappingError.message}` : '' }
+      </div>
     </div>
   )
 }

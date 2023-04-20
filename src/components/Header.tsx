@@ -1,9 +1,10 @@
 import ThemeToggle from './ThemeToggle';
+import styles from '../css/RMLMappingEditor.module.scss';
 
 function Header() {
   return (
-    <div className='RML-Editor-Header RML-Editor-Centered'>
-      <div className='RML-Editor-Logo'>RML Mapping Editor</div>
+    <div className={styles.header}>
+      <div className={styles.logo}>RML Mapping Editor</div>
       <ThemeToggle />
     </div>
   )

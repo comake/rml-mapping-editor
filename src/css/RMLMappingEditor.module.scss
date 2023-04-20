@@ -1,0 +1,243 @@
+/* Theme Styles */
+.rmlEditor {
+  height: 100%;
+  width: 100%;
+  background-color: var(--main-background-color);
+  display: flex;
+  flex-direction: column;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.rmlEditorDark {
+  composes: rmlEditor;
+  color-scheme: dark;
+  
+  --header-icon-color: rgb(227, 230, 234);
+  --secondary-icon-color: rgb(84, 88, 93);
+  --primary-icon-color: rgb(142, 146, 150);
+  
+  --primary-text-color: rgb(215, 218, 224);
+  --secondary-text-color: #abb2bf;
+  --tertiary-text-color: rgba(215, 218, 224, 0.5);
+  --quaternary-text-color: rgba(215, 218, 224, 0.25);
+
+  --header-background-color: rgb(33, 37, 43);
+  --header-border-color: rgb(28, 30, 36);
+
+  --main-background-color: rgb(40, 44, 52);
+  --side-panel-background-color: rgb(33, 37, 43);
+
+  --explorer-item-selected-color: #2c313a;
+  --explorer-item-hover-color: rgba(44, 49, 58, 0.4);
+
+  --button-hover-color: #333842;
+
+  --warning-background-color: rgba(255, 0, 0, 0.15);
+  --warning-text-color: #ff1818;
+
+  --dropdown-background-color: rgb(53, 59, 69);
+  --dropdown-border-color: rgb(54, 57, 65);
+  --dropdown-button-color: rgb(41, 43, 50);
+
+  --cta-button-color: #ff88fd;
+
+  --context-menu-border-color: rgba(153, 200, 255);
+}
+
+.rmlEditorLight {
+  composes: rmlEditor;
+
+  --header-icon-color: #24292f;
+  --secondary-icon-color: rgb(177, 184, 190);
+  --primary-icon-color: rgb(108, 113, 118);
+
+  --primary-text-color: #24292f;
+  --secondary-text-color: rgb(57, 59, 63);
+  --tertiary-text-color: rgba(61, 67, 74, 0.5);
+  --quaternary-text-color: rgba(87, 96, 106, 0.5);
+
+  --header-background-color: rgb(246, 248, 250);
+  --header-border-color: hsl(210, 18%, 84%);
+
+  --main-background-color: rgb(255, 255, 255);
+  --side-panel-background-color: rgb(246, 248, 250);
+
+  --explorer-item-selected-color: rgba(175, 184, 193, 0.2);
+  --explorer-item-hover-color: rgba(234, 238, 242, 0.5);
+
+  --button-hover-color: rgb(175 184 193 / 20%);
+
+  --warning-background-color: rgba(255, 0, 0, 0.15);
+  --warning-text-color: #ff1818;
+
+  --dropdown-background-color: rgb(255, 255, 255);
+  --dropdown-border-color: hsl(215, 19%, 88%);
+  --dropdown-button-color: rgb(244, 244, 245);
+
+  --cta-button-color: #ff88fd;
+
+  --context-menu-border-color: rgba(0, 94, 204);
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  composes: centered;
+  padding: 0 10px;
+  height: 42px;
+  border-bottom: 1px solid var(--header-border-color);
+  background-color: var(--header-background-color);
+}
+
+.logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary-text-color);
+  flex: 1;
+}
+
+.body {
+  background-color: var(--main-background-color);
+  flex: 1;
+}
+
+.draggableViewContainer {
+  position: relative;
+}
+
+.draggableViewSection .draggableViewContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.draggableViewSection .dragHandle {
+  z-index: 3;
+}
+
+.draggableViewSection::after {
+  z-index: 2;
+  content: '';
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+
+.draggableViewSection .dragHandle, 
+.draggableViewSection::after {
+  position: absolute;
+  background-color: transparent;
+}
+
+.draggableViewSection.dragHandleLongHover::after, 
+.draggableViewSection.dragging::after {
+  background-color: var(--context-menu-border-color);
+}
+
+.draggableViewContainer.vertical {
+  .draggableViewSection > .dragHandle,
+  .draggableViewSection.drag-handle-long-hover::after,
+  .draggableViewSection.dragging::after {
+    width: 100%;
+    bottom: -3px;
+    height: 6px;
+    left: 0;
+    cursor: row-resize;
+  }
+}
+
+.draggableViewContainer:not(.vertical) {
+  .draggableViewSection > .dragHandle,
+  .draggableViewSection.dragHandleLongHover::after, 
+  .draggableViewSection.dragging::after {
+    height: 100%;
+    right: -3px;
+    width: 6px;
+    top: 0;
+    cursor: col-resize;
+  }
+}
+
+.panel {
+  background-color: var(--side-panel-background-color);
+  height:100%;
+}
+
+.inputPanel {
+  composes: panel;
+  border-right: 1px solid var(--header-border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.outputPanel {
+  composes: panel;
+  border-left: 1px solid var(--header-border-color);
+}
+
+.themeToggle {
+  composes: centered;
+  background: none;
+  border: none;
+  outline: none;
+  height: 26px;
+  width: 26px;
+  border-radius: 50%;
+  justify-content: center;
+  margin-left: 15px;
+}
+
+.themeToggle:hover {
+  background-color: var(--button-hover-color);
+}
+
+.themeToggle svg {
+  height: 16px;
+  width: 16px;
+  fill: var(--header-icon-color);
+  stroke: var(--header-icon-color);
+}
+
+.mappingEditor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height:36px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--header-border-color);
+}
+
+.mappingError {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height:36px;
+  padding: 0 10px;
+  font-size: 13px;
+  color: var(--warning-text-color);
+  border-top: 1px solid var(--header-border-color);
+}
+
+.inputSourceName {
+  padding: 5px 10px;
+  color: var(--secondary-text-color);
+  width: 100%;
+  font-size: 13px;
+}
+
+.mappingEditorCodeView {
+  flex: 1;
+  overflow: auto;
+}
