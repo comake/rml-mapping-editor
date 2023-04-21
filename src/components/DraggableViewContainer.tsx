@@ -2,7 +2,9 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 import { FixedLengthArray } from '../util/TypeUtil';
 import DraggableViewSection from './DraggableViewSection';
 import styles from '../css/RMLMappingEditor.module.scss';
+import useWindowEvent from '../hooks/useWindowEvent';
 
+const RESIZE_TIMEOUT_DURATION = 100;
 const MINIMUM_DIMENSION = 130;
 
 export interface DraggableViewContainerProps<T extends number> {
@@ -19,6 +21,7 @@ function DraggableViewContainer<T extends number>({
   additionalClasses = [],
 }: DraggableViewContainerProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const resizeTimeout = useRef<ReturnType<typeof setTimeout>>();
   const [dimensions, setDimensions] = useState<FixedLengthArray<number | undefined, T>>(defaultViewDimensions);
 
   const updateDimensions = useCallback(() => {
@@ -81,6 +84,51 @@ function DraggableViewContainer<T extends number>({
       }) as unknown as FixedLengthArray<number | undefined, T>);
     }
   }, [dimensions]);
+
+  const recalcWidths = useCallback(() => {
+    const totalContainerDimension = vertical
+      ? containerRef.current!.offsetHeight
+      : containerRef.current!.offsetWidth;
+
+    const indiciesOfPreferedWidths = defaultViewDimensions.reduce((arr: number[], oldDimension, index) => {
+      if (oldDimension !== undefined) {
+        arr.push(index);
+      }
+      return arr;
+    }, []);
+
+    let totalPreferredSpace = 0;
+    let totalNonPreferedSpace = 0;
+    dimensions.forEach((oldDimension, index) => {
+      if (indiciesOfPreferedWidths.includes(index)) {
+        totalPreferredSpace += oldDimension ?? 0;
+      } else {
+        totalNonPreferedSpace += oldDimension ?? 0;
+      }
+    });
+
+    const newLeftoverSpace = Math.abs(totalContainerDimension - totalPreferredSpace);
+
+    const newDimensions = dimensions.map((oldDimension, index) => {
+      if (indiciesOfPreferedWidths.includes(index)) {
+        return oldDimension
+      } else {
+        return newLeftoverSpace * ( (oldDimension ?? 0) / totalNonPreferedSpace )
+      }
+    });
+
+    setDimensions(newDimensions as unknown as FixedLengthArray<number | undefined, T>);
+  }, [defaultViewDimensions, dimensions, vertical]);
+
+  const onResize = useCallback(() => {
+    if (resizeTimeout.current) {
+      clearTimeout(resizeTimeout.current);
+    }
+
+    resizeTimeout.current = setTimeout(recalcWidths, RESIZE_TIMEOUT_DURATION);
+  }, [recalcWidths]);
+
+  useWindowEvent('resize', true, onResize);
 
   return (
     <div 
