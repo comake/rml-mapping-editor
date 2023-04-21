@@ -7,26 +7,27 @@ export const INPUT_TYPES = {
   xml: 'xml',
 }
 
-export const INPUT_FILE_NAME_BY_TYPE = {
-  [INPUT_TYPES.json]: 'input.json',
-  [INPUT_TYPES.csv]: 'input.csv',
-  [INPUT_TYPES.xml]: 'input.xml'
+export const DEFAULT_INPUT_FILE_BY_TYPE = {
+  [INPUT_TYPES.json]: '[\n  {\n    \n  }\n]',
+  [INPUT_TYPES.csv]: '',
+  [INPUT_TYPES.xml]: ''
 }
 
 export type InputType = ValueOf<typeof INPUT_TYPES>;
 
+export interface InputFile {
+  name: string;
+  contents: string;
+}
+
 interface InputContextType {
-  input?: string,
-  inputType: InputType;
-  setInput: (input: string) => void,
-  setInputType: (inputType: string) => void,
+  inputFiles: InputFile[],
+  setInputFiles: (inputFiles: InputFile[]) => void,
 }
 
 const InputContext = createContext<InputContextType>({ 
-  input: '',
-  inputType: INPUT_TYPES.json,
-  setInput: (input: string) => {},
-  setInputType: (inputType: InputType) => {},
+  inputFiles: [],
+  setInputFiles: (inputFiles: InputFile[]) => {},
 });
 
 export default InputContext;

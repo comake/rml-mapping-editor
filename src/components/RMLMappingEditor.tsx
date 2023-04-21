@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ThemeContext, { THEMES } from '../contexts/ThemeContext';
 import styles from '../css/RMLMappingEditor.module.scss';
 import { FixedLengthArray } from '../util/TypeUtil';
@@ -9,11 +9,12 @@ import InputPanel from './InputPanel';
 import OutputPanel from './OutputPanel';
 import type { NodeObject } from 'jsonld'; 
 import MappingContext from '../contexts/MappingContext';
-import InputContext, { INPUT_FILE_NAME_BY_TYPE, INPUT_TYPES, InputType } from '../contexts/InputContext';
+import InputContext, { DEFAULT_INPUT_FILE_BY_TYPE, INPUT_TYPES, InputFile } from '../contexts/InputContext';
 import OutputContext from '../contexts/OutputContext';
 import * as RMLMapper from '@comake/rmlmapper-js';
+import NewInputModal from './NewInputModal';
 
-const BASE_PANEL_WIDTH = 450;
+const BASE_PANEL_WIDTH = 400;
 const RUN_MAPPING_TIMEOUT_DURATION = 500;
 
 const defaultMapping = {
@@ -34,20 +35,19 @@ const defaultMapping = {
   ]
 };
 
-const defaultJSONInput = '{\n  \n}';
-const defaultCSVInput = '';
-const defaultXMLInput = '';
-
-const defaultInputType = INPUT_TYPES.json;
+const defaultInputFiles = [{
+  name: 'input.json',
+  contents: DEFAULT_INPUT_FILE_BY_TYPE[INPUT_TYPES.json],
+}];
 
 export function RMLMappingEditor() {
   const [theme, setTheme] = useState(THEMES.dark);
   const [mapping, setMapping] = useState<NodeObject>(defaultMapping);
   const [mappingError, setMappingError] = useState<Error>();
-  const [input, setInput] = useState<string>(defaultJSONInput);
-  const [inputType, setInputType] = useState<InputType>(defaultInputType);
+  const [inputFiles, setInputFiles] = useState<InputFile[]>(defaultInputFiles);
   const [output, setOutput] = useState<NodeObject[]>();
   const runMappingTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const [addingNewInput, setAddingNewInput] = useState(false);
   
   const themeContext = useMemo(
     () => ({ theme, setTheme }), 
@@ -55,8 +55,8 @@ export function RMLMappingEditor() {
   );
 
   const inputContext = useMemo(
-    () => ({ input, inputType, setInputType, setInput }), 
-    [ input, setInput, inputType, setInputType ],
+    () => ({ inputFiles, setInputFiles }), 
+    [ inputFiles, setInputFiles ],
   );
 
   const outputContext = useMemo(
@@ -74,23 +74,19 @@ export function RMLMappingEditor() {
     [],
   );
 
-  useEffect(() => {
-    if (inputType === INPUT_TYPES.json) {
-      setInput(defaultJSONInput);
-    } else if (inputType === INPUT_TYPES.csv) {
-      setInput(defaultCSVInput);
-    } else if (inputType === INPUT_TYPES.xml) {
-      setInput(defaultXMLInput);
-    }
-  }, [inputType]);
+  const addNewInput = useCallback(() => setAddingNewInput(true), []);
+  const closeNewInputModal = useCallback(() => setAddingNewInput(false), []);
 
   useEffect(() => {
     async function runMapping() {
       setMappingError(undefined);
-      
-      const inputFiles = { [INPUT_FILE_NAME_BY_TYPE[inputType]]: input };
+
+      const inputFilesByName = inputFiles.reduce((obj, inputFile) => {
+        return { ...obj, [inputFile.name]: inputFile.contents }
+      }, {});
+
       try {
-        const result = await RMLMapper.parseJsonLd(mapping, inputFiles) as NodeObject[];
+        const result = await RMLMapper.parseJsonLd(mapping, inputFilesByName) as NodeObject[];
         setOutput(result);
       } catch (error: unknown) {
         console.log(error);
@@ -104,13 +100,13 @@ export function RMLMappingEditor() {
       clearTimeout(runMappingTimeout.current);
     }
     runMappingTimeout.current = setTimeout(runMapping, RUN_MAPPING_TIMEOUT_DURATION);
-  }, [input, inputType, mapping]);
+  }, [inputFiles, mapping]);
 
   const content = useMemo(() => ([
-    <InputPanel />,
+    <InputPanel addNewInput={addNewInput} />,
     <EditorPanel />,
     <OutputPanel />
-  ] as FixedLengthArray<ReactNode, 3>), []);
+  ] as FixedLengthArray<ReactNode, 3>), [addNewInput]);
 
   return (
     <ThemeContext.Provider value={themeContext}>
@@ -124,6 +120,7 @@ export function RMLMappingEditor() {
                 viewContent={content}
                 additionalClasses={[styles.body]}
               />
+              { addingNewInput && <NewInputModal close={closeNewInputModal}/>}
             </div>
           </OutputContext.Provider>
         </InputContext.Provider>

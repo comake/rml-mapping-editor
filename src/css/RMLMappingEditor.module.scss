@@ -31,6 +31,9 @@
   --main-background-color: rgb(40, 44, 52);
   --side-panel-background-color: rgb(33, 37, 43);
 
+  --explorer-item-selected-color: #2c313a;
+  --explorer-item-hover-color: rgba(44, 49, 58, 0.4);
+
   --button-selected-color: rgba(53, 72, 119, 0.5);
   --button-hover-color: #333842;
 
@@ -65,6 +68,9 @@
   --main-background-color: rgb(255, 255, 255);
   --side-panel-background-color: rgb(246, 248, 250);
 
+  --explorer-item-selected-color: rgba(175, 184, 193, 0.2);
+  --explorer-item-hover-color: rgba(234, 238, 242, 0.5);
+
   --button-selected-color: rgb(217, 229, 251);
   --button-hover-color: rgb(175 184 193 / 20%);
 
@@ -84,6 +90,13 @@
   display: flex;
   align-items: center;
 }
+
+.centeredBothDirections {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .header {
   composes: centered;
@@ -161,6 +174,7 @@
 }
 
 .panel {
+  background-color: var(--side-panel-background-color);
   height:100%;
 }
 
@@ -169,7 +183,6 @@
 }
 
 .inputPanel {
-  background-color: var(--main-background-color);
   composes: panel;
   border-right: 1px solid var(--header-border-color);
   display: flex;
@@ -179,7 +192,6 @@
 .outputPanel {
   display: flex;
   flex-direction: column;
-  background-color: var(--side-panel-background-color);
   composes: panel;
   border-left: 1px solid var(--header-border-color);
 }
@@ -227,11 +239,20 @@
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 4px;
-  padding: 2px 5px;
+  border-radius: 5px;
+  padding: 0 5px;
   color: var(--secondary-text-color);
   font-size: 13px;
   margin-right: 2px;
+  height: 22px;
+}
+
+.iconPanelHeaderButton {
+  padding: 0;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .panelHeaderButton:hover {
@@ -241,6 +262,12 @@
 .panelHeaderButtonSelected {
   background-color: var(--button-selected-color) !important;
   color: var(--button-selected-text-color) !important;
+}
+
+.panelHeaderButton svg {
+  fill: var(--primary-icon-color);
+  width: 14px;
+  height: 14px;
 }
 
 .mappingError {
@@ -259,9 +286,136 @@
   composes: stretch;
   color: var(--secondary-text-color);
   font-size: 13px;
+  margin-left: 4px;
 }
 
 .mappingEditorCodeView {
   composes: stretch;
   overflow: auto;
+}
+
+.inputFilesList {
+  composes: stretch;
+  overflow: auto;
+  padding: 8px;
+}
+
+.inputFile  {
+  cursor: pointer;
+  padding: 7px 10px;
+  border-radius: 5px;
+  position: relative;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--secondary-text-color);
+}
+
+.inputFile:hover {
+  background-color: var(--explorer-item-hover-color);
+}
+
+.inputFile.Selected {
+  background-color: var(--explorer-item-selected-color);
+  color: var(--primary-text-color);
+}
+
+.backArrow {
+  transform: rotate(90deg);
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 101;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.modalCard {
+  padding: 0;
+  box-shadow: 0rem 0.25rem 1rem 0rem #00000056;
+  border-radius: 9px;
+  position: relative;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--main-background-color);
+  border: 1px solid var(--dropdown-border-color);
+
+}
+
+.modalHeader, .modalFooter {
+  padding: 20px 20px 15px 20px;
+  display: flex;
+  align-items: center;
+}
+
+.modalHeader .closeButton {
+  height: 30px;
+  width: 30px;
+  min-width: 30px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalHeader .closeButton:hover {
+  background-color: var(--button-hover-color);
+}
+
+.modalHeader .closeButton .closeIcon {
+  fill: var(--primary-icon-color);
+}
+
+.modalHeaderText {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-text-color);
+}
+
+.newInputModal .modalCard {
+  width: 500px;
+  max-width: 100%;
+  padding-bottom: 20px;
+}
+
+.newInputModalBody {
+  padding: 0 20px;
+}
+
+.newInputModalBody p {
+  margin-top: 0;
+  color: var(--tertiary-text-color);
+  font-size: 13px;
+}
+
+.newInputTypeButton {
+  padding: 10px 30px;
+  border-radius: 10px;
+  margin: 5px 10px 0 0;
+  background-color: var(--dropdown-background-color);
+  border: 1px solid var(--dropdown-border-color);
+  outline: none;
+  cursor: pointer;
+  color: var(--secondary-text-color);
+  font-size: 15px;
+  font-weight: 600;
+
+  &:hover {
+    background-color: var(--button-selected-color);
+    color: var(--button-selected-text-color)
+  }
 }
