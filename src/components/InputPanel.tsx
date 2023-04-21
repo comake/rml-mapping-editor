@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import InputContext, { INPUT_TYPES } from '../contexts/InputContext';
 import styles from '../css/RMLMappingEditor.module.scss';
 import CodeEditor from './CodeEditor';
@@ -21,7 +21,8 @@ function InputPanel({ addNewInput }: InputPanelProps) {
   const selectedInputFile = useMemo(
     () => selectedInputFileIndex !== undefined ? inputFiles[selectedInputFileIndex] : undefined, 
     [inputFiles, selectedInputFileIndex]
-  )
+  );
+  const [prevInputFilesLength, setPrevInputFilesLength] = useState<number>(inputFiles.length);
 
   const inputType = useMemo(() => {
     if (selectedInputFile) {
@@ -49,6 +50,15 @@ function InputPanel({ addNewInput }: InputPanelProps) {
   }, [selectedInputFileIndex, setInputFiles, inputFiles]);
 
   const closeSelectedInputFile = useCallback(() => setSelectedInputFileIndex(undefined), []);
+
+  useEffect(() => {
+    if (inputFiles.length !== prevInputFilesLength) {
+      setPrevInputFilesLength(inputFiles.length);
+      if (inputFiles.length > prevInputFilesLength) {
+        setSelectedInputFileIndex(inputFiles.length-1);
+      }
+    }
+  }, [inputFiles, prevInputFilesLength]);
 
   return (
     <div className={styles.inputPanel}>
