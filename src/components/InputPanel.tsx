@@ -21,10 +21,10 @@ function InputPanel() {
   return (
     <div className={styles.inputPanel}>
       <div className={styles.panelHeader}>
-        <button onClick={changeToJSONInput}>JSON</button>
-        <button onClick={changeToXMLInput}>XML</button>
+        <div className={styles.inputSourceName}>Source name: {INPUT_FILE_NAME_BY_TYPE[inputType]}</div>
+        <button onClick={changeToJSONInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.json ? styles.panelHeaderButtonSelected : ''}`}>JSON</button>
+        <button onClick={changeToXMLInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.xml ? styles.panelHeaderButtonSelected : ''}`}>XML</button>
       </div>
-      <div className={styles.inputSourceName}>Source name: {INPUT_FILE_NAME_BY_TYPE[inputType]}</div>
       <CodeEditor 
         key={`${inputType}${resetInputAfterTypeChange}`}
         mode={inputType}

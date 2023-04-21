@@ -23,6 +23,7 @@
   --secondary-text-color: #abb2bf;
   --tertiary-text-color: rgba(215, 218, 224, 0.5);
   --quaternary-text-color: rgba(215, 218, 224, 0.25);
+  --button-selected-text-color: rgb(62, 154, 255);
 
   --header-background-color: rgb(33, 37, 43);
   --header-border-color: rgb(28, 30, 36);
@@ -30,9 +31,7 @@
   --main-background-color: rgb(40, 44, 52);
   --side-panel-background-color: rgb(33, 37, 43);
 
-  --explorer-item-selected-color: #2c313a;
-  --explorer-item-hover-color: rgba(44, 49, 58, 0.4);
-
+  --button-selected-color: rgba(53, 72, 119, 0.5);
   --button-hover-color: #333842;
 
   --warning-background-color: rgba(255, 0, 0, 0.15);
@@ -58,6 +57,7 @@
   --secondary-text-color: rgb(57, 59, 63);
   --tertiary-text-color: rgba(61, 67, 74, 0.5);
   --quaternary-text-color: rgba(87, 96, 106, 0.5);
+  --button-selected-text-color: rgb(62, 154, 255);
 
   --header-background-color: rgb(246, 248, 250);
   --header-border-color: hsl(210, 18%, 84%);
@@ -65,9 +65,7 @@
   --main-background-color: rgb(255, 255, 255);
   --side-panel-background-color: rgb(246, 248, 250);
 
-  --explorer-item-selected-color: rgba(175, 184, 193, 0.2);
-  --explorer-item-hover-color: rgba(234, 238, 242, 0.5);
-
+  --button-selected-color: rgb(217, 229, 251);
   --button-hover-color: rgb(175 184 193 / 20%);
 
   --warning-background-color: rgba(255, 0, 0, 0.15);
@@ -163,11 +161,15 @@
 }
 
 .panel {
-  background-color: var(--side-panel-background-color);
   height:100%;
 }
 
+.stretch {
+  flex: 1;
+}
+
 .inputPanel {
+  background-color: var(--main-background-color);
   composes: panel;
   border-right: 1px solid var(--header-border-color);
   display: flex;
@@ -175,6 +177,9 @@
 }
 
 .outputPanel {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--side-panel-background-color);
   composes: panel;
   border-left: 1px solid var(--header-border-color);
 }
@@ -211,11 +216,31 @@
 .panelHeader {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   width: 100%;
-  height:36px;
-  padding: 0 10px;
+  height:32px;
+  padding: 0 6px;
   border-bottom: 1px solid var(--header-border-color);
+}
+
+.panelHeaderButton {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 5px;
+  color: var(--secondary-text-color);
+  font-size: 13px;
+  margin-right: 2px;
+}
+
+.panelHeaderButton:hover {
+  background-color: var(--button-hover-color);
+}
+
+.panelHeaderButtonSelected {
+  background-color: var(--button-selected-color) !important;
+  color: var(--button-selected-text-color) !important;
 }
 
 .mappingError {
@@ -223,7 +248,7 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  height:36px;
+  height:32px;
   padding: 0 10px;
   font-size: 13px;
   color: var(--warning-text-color);
@@ -231,13 +256,12 @@
 }
 
 .inputSourceName {
-  padding: 5px 10px;
+  composes: stretch;
   color: var(--secondary-text-color);
-  width: 100%;
   font-size: 13px;
 }
 
 .mappingEditorCodeView {
-  flex: 1;
+  composes: stretch;
   overflow: auto;
 }

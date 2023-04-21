@@ -34,9 +34,10 @@ function EditorPanel() {
   return (
     <div className={styles.mappingEditor}>
       <div className={styles.panelHeader}>
-        <button onClick={changeToDndView}>Drag & Drop</button>
-        <button onClick={changeToFormView}>Form</button>
-        <button onClick={changeToCodeView}>Code</button>
+        <div className={styles.stretch}></div>
+        <button onClick={changeToCodeView} className={`${styles.panelHeaderButton} ${view === views.code ? styles.panelHeaderButtonSelected : ''}`}>Code</button>
+        <button onClick={changeToDndView} className={`${styles.panelHeaderButton} ${view === views.dnd ? styles.panelHeaderButtonSelected : ''}`}>Drag & Drop</button>
+        <button onClick={changeToFormView} className={`${styles.panelHeaderButton} ${view === views.form ? styles.panelHeaderButtonSelected : ''}`}>Form</button>
       </div>
       { view === views.code && (
         <CodeEditor 

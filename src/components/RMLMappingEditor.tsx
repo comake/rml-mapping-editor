@@ -13,7 +13,7 @@ import InputContext, { INPUT_FILE_NAME_BY_TYPE, INPUT_TYPES, InputType } from '.
 import OutputContext from '../contexts/OutputContext';
 import * as RMLMapper from '@comake/rmlmapper-js';
 
-const BASE_PANEL_WIDTH = 400;
+const BASE_PANEL_WIDTH = 450;
 const RUN_MAPPING_TIMEOUT_DURATION = 500;
 
 const defaultMapping = {
