@@ -1,6 +1,13 @@
-import { DragEvent, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
-import { OrArray } from '../util/TypeUtil';
-import styles from '../css/RMLMappingEditor.module.scss';
+import {
+  DragEvent,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { OrArray } from "../util/TypeUtil";
+import styles from "../css/RMLMappingEditor.module.scss";
 
 const DRAG_HOVER_TIMEOUT_DURATION = 380;
 
@@ -14,14 +21,25 @@ export interface DraggableViewSectionProps {
   onDimensionChange: (change: number) => void;
 }
 
-function DraggableViewSection({ children, offset, dimension, vertical, dimensionsComputed, isLast, onDimensionChange }: DraggableViewSectionProps) {
+function DraggableViewSection({
+  children,
+  offset,
+  dimension,
+  vertical,
+  dimensionsComputed,
+  isLast,
+  onDimensionChange,
+}: DraggableViewSectionProps) {
   const [isDragging, setIsDragging] = useState(false);
   const prevDragPosition = useRef<{ x: number; y: number }>();
   const hoverTimeout = useRef<ReturnType<typeof setTimeout>>();
   const [hasLongHovered, setHasLongHovered] = useState(false);
   const onMouseEnter = useCallback(() => {
     if (!hoverTimeout.current) {
-      hoverTimeout.current = setTimeout(() => setHasLongHovered(true), DRAG_HOVER_TIMEOUT_DURATION);
+      hoverTimeout.current = setTimeout(
+        () => setHasLongHovered(true),
+        DRAG_HOVER_TIMEOUT_DURATION
+      );
     }
   }, []);
 
@@ -33,17 +51,34 @@ function DraggableViewSection({ children, offset, dimension, vertical, dimension
     setHasLongHovered(false);
   }, []);
 
-  const handleDrag = useCallback((event: DragEvent<HTMLDivElement>) => {
-    if (!(event.clientX === 0 && event.clientY === 0)) {
-      if (prevDragPosition.current) {
-        const dimensionChange = vertical 
-          ? event.clientY - prevDragPosition.current.y
-          : event.clientX - prevDragPosition.current.x;
-        onDimensionChange(dimensionChange);
-      }
-      prevDragPosition.current = { x: event.clientX, y: event.clientY }
-    }
-  }, [onDimensionChange, vertical]);
+  const handleDrag = useCallback(
+    (event: DragEvent<HTMLDivElement | Body>) => {
+      let isDocumentDragListenerAdded = false;
+      const dragoverHandler = (e: DragEvent<Body>) => {
+        isDocumentDragListenerAdded = true;
+        event = e;
+      };
+      if (!isDocumentDragListenerAdded)
+        document.body.addEventListener("dragover", dragoverHandler as any);
+      // Adding this listener so that this component works in FireFox.
+      // https://stackoverflow.com/questions/23992091/no-e-clientx-or-e-clienty-on-drag-event-in-firefox
+
+      setTimeout(() => {
+        if (!(event.clientX === 0 && event.clientY === 0)) {
+          if (prevDragPosition.current) {
+            const dimensionChange = vertical
+              ? event.clientY - prevDragPosition.current.y
+              : event.clientX - prevDragPosition.current.x;
+            onDimensionChange(dimensionChange);
+          }
+          prevDragPosition.current = { x: event.clientX, y: event.clientY };
+        }
+        document.body.removeEventListener("dragover", dragoverHandler as any);
+        isDocumentDragListenerAdded = false;
+      });
+    },
+    [onDimensionChange, vertical]
+  );
 
   const handleDragStart = useCallback((event: DragEvent<HTMLDivElement>) => {
     setIsDragging(true);
@@ -55,32 +90,39 @@ function DraggableViewSection({ children, offset, dimension, vertical, dimension
     setIsDragging(false);
   }, []);
 
-  const style = useMemo(() => (
-    dimensionsComputed 
-      ? { 
-          position: 'absolute',
-          width: vertical ? '100%' : dimension, 
-          left: vertical ? '0px' : offset, 
-          height: vertical ? dimension : '100%', 
-          top: vertical ? offset : '0px', 
-        } as const
-      : {
-          position: 'relative',
-          flex: dimension ? undefined : 1,
-          width: vertical ? '100%' : dimension, 
-          height: vertical ? dimension : '100%', 
-        } as const
-  ), [dimensionsComputed, vertical, dimension, offset]);
+  const style = useMemo(
+    () =>
+      dimensionsComputed
+        ? ({
+            position: "absolute",
+            width: vertical ? "100%" : dimension,
+            left: vertical ? "0px" : offset,
+            height: vertical ? dimension : "100%",
+            top: vertical ? offset : "0px",
+          } as const)
+        : ({
+            position: "relative",
+            flex: dimension ? undefined : 1,
+            width: vertical ? "100%" : dimension,
+            height: vertical ? dimension : "100%",
+          } as const),
+    [dimensionsComputed, vertical, dimension, offset]
+  );
 
   return (
-    <div className={`${styles.draggableViewSection} ${isDragging ? styles.dragging : ''} ${hasLongHovered ? styles.dragHandleLongHover : ''}`} style={style}>
+    <div
+      className={`${styles.draggableViewSection} ${
+        isDragging ? styles.dragging : ""
+      } ${hasLongHovered ? styles.dragHandleLongHover : ""}`}
+      style={style}
+    >
       {children}
-      { !isLast && (
-        <div 
+      {!isLast && (
+        <div
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           className={styles.dragHandle}
-          draggable='true'
+          draggable="true"
           onDrag={handleDrag}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
