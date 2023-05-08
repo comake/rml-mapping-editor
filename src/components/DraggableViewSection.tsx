@@ -21,6 +21,8 @@ export interface DraggableViewSectionProps {
   onDimensionChange: (change: number) => void;
 }
 
+let dragEvent: DragEvent<Body> | null = null;
+
 function DraggableViewSection({
   children,
   offset,
@@ -43,6 +45,11 @@ function DraggableViewSection({
     }
   }, []);
 
+  const dragoverHandler = useCallback((e: DragEvent<Body>) => {
+    // isDocumentDragListenerAdded = true;
+    dragEvent = e;
+  }, []);
+
   const onMouseLeave = useCallback(() => {
     if (hoverTimeout.current) {
       clearTimeout(hoverTimeout.current);
@@ -52,29 +59,25 @@ function DraggableViewSection({
   }, []);
 
   const handleDrag = useCallback(
-    (event: DragEvent<HTMLDivElement | Body>) => {
-      let isDocumentDragListenerAdded = false;
-      const dragoverHandler = (e: DragEvent<Body>) => {
-        isDocumentDragListenerAdded = true;
-        event = e;
-      };
-      if (!isDocumentDragListenerAdded)
-        document.body.addEventListener("dragover", dragoverHandler as any);
-      // Adding this listener so that this component works in FireFox.
-      // https://stackoverflow.com/questions/23992091/no-e-clientx-or-e-clienty-on-drag-event-in-firefox
+    (_: DragEvent<HTMLDivElement | Body>) => {
+      // let isDocumentDragListenerAdded = false;
+
+      // if (!isDocumentDragListenerAdded)
 
       setTimeout(() => {
-        if (!(event.clientX === 0 && event.clientY === 0)) {
+        if (dragEvent && !(dragEvent?.clientX === 0 && dragEvent?.clientY === 0)) {
           if (prevDragPosition.current) {
             const dimensionChange = vertical
-              ? event.clientY - prevDragPosition.current.y
-              : event.clientX - prevDragPosition.current.x;
+              ? (dragEvent.clientY ?? 0) - prevDragPosition.current.y
+              : (dragEvent.clientX ?? 0) - prevDragPosition.current.x;
             onDimensionChange(dimensionChange);
           }
-          prevDragPosition.current = { x: event.clientX, y: event.clientY };
+          prevDragPosition.current = {
+            x: dragEvent.clientX,
+            y: dragEvent.clientY,
+          };
         }
-        document.body.removeEventListener("dragover", dragoverHandler as any);
-        isDocumentDragListenerAdded = false;
+        // isDocumentDragListenerAdded = false;
       });
     },
     [onDimensionChange, vertical]
@@ -83,12 +86,15 @@ function DraggableViewSection({
   const handleDragStart = useCallback((event: DragEvent<HTMLDivElement>) => {
     setIsDragging(true);
     prevDragPosition.current = { x: event.clientX, y: event.clientY };
-  }, []);
+    document.body.addEventListener("dragover", dragoverHandler as any);
+  }, [dragoverHandler]);
 
   const handleDragEnd = useCallback(() => {
     prevDragPosition.current = undefined;
     setIsDragging(false);
-  }, []);
+    document.body.removeEventListener("dragover", dragoverHandler as any);
+    dragEvent = null;
+  }, [dragoverHandler]);
 
   const style = useMemo(
     () =>
