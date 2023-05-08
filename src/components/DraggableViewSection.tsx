@@ -46,7 +46,6 @@ function DraggableViewSection({
   }, []);
 
   const dragoverHandler = useCallback((e: DragEvent<Body>) => {
-    // isDocumentDragListenerAdded = true;
     dragEvent = e;
   }, []);
 
@@ -60,10 +59,6 @@ function DraggableViewSection({
 
   const handleDrag = useCallback(
     (_: DragEvent<HTMLDivElement | Body>) => {
-      // let isDocumentDragListenerAdded = false;
-
-      // if (!isDocumentDragListenerAdded)
-
       setTimeout(() => {
         if (dragEvent && !(dragEvent?.clientX === 0 && dragEvent?.clientY === 0)) {
           if (prevDragPosition.current) {
@@ -77,7 +72,6 @@ function DraggableViewSection({
             y: dragEvent.clientY,
           };
         }
-        // isDocumentDragListenerAdded = false;
       });
     },
     [onDimensionChange, vertical]
