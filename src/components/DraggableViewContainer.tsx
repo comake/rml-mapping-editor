@@ -83,7 +83,6 @@ function DraggableViewContainer<T extends number>({
           collapsedItemsSpace += dim;
         } else if (
           !collapsedIndices.includes(index) &&
-          dim !== undefined &&
           dim === 0
         ) {
           uncollapsedItemsSpace +=
