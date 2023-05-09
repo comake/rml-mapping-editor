@@ -5,11 +5,11 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { FixedLengthArray } from "../util/TypeUtil";
-import DraggableViewSection from "./DraggableViewSection";
-import styles from "../css/RMLMappingEditor.module.scss";
-import useWindowEvent from "../hooks/useWindowEvent";
+} from 'react';
+import { FixedLengthArray } from '../util/TypeUtil';
+import DraggableViewSection from './DraggableViewSection';
+import styles from '../css/RMLMappingEditor.module.scss';
+import useWindowEvent from '../hooks/useWindowEvent';
 
 const RESIZE_TIMEOUT_DURATION = 100;
 const MINIMUM_DIMENSION = 130;
@@ -81,10 +81,7 @@ function DraggableViewContainer<T extends number>({
       dimensions.forEach((dim, index) => {
         if (collapsedIndices.includes(index) && dim !== undefined && dim > 0) {
           collapsedItemsSpace += dim;
-        } else if (
-          !collapsedIndices.includes(index) &&
-          dim === 0
-        ) {
+        } else if (!collapsedIndices.includes(index) && dim === 0) {
           uncollapsedItemsSpace +=
             defaultViewDimensions[index] ?? MINIMUM_DIMENSION;
         }
@@ -132,19 +129,19 @@ function DraggableViewContainer<T extends number>({
   const classes = useMemo(() => {
     return [
       styles.draggableViewContainer,
-      vertical ? "vertical" : "horizonatal",
+      vertical ? 'vertical' : 'horizonatal',
       ...additionalClasses,
-    ].join(" ");
+    ].join(' ');
   }, [vertical, additionalClasses]);
 
   const style = useMemo(
     () =>
       hasUndefinedDimensions
         ? ({
-            display: "flex",
-            flexDirection: vertical ? "column" : "row",
+            display: 'flex',
+            flexDirection: vertical ? 'column' : 'row',
           } as const)
-        : ({ position: "relative" } as const),
+        : ({ position: 'relative' } as const),
     [hasUndefinedDimensions, vertical]
   );
 
@@ -237,7 +234,7 @@ function DraggableViewContainer<T extends number>({
     resizeTimeout.current = setTimeout(recalcWidths, RESIZE_TIMEOUT_DURATION);
   }, [recalcWidths]);
 
-  useWindowEvent("resize", true, onResize);
+  useWindowEvent('resize', true, onResize);
 
   return (
     <div ref={containerRef} className={classes} style={style}>
