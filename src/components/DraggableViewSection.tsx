@@ -21,8 +21,6 @@ export interface DraggableViewSectionProps {
   onDimensionChange: (change: number) => void;
 }
 
-let dragEvent: DragEvent<Body> | null = null;
-
 function DraggableViewSection({
   children,
   offset,
@@ -32,6 +30,7 @@ function DraggableViewSection({
   isLast,
   onDimensionChange,
 }: DraggableViewSectionProps) {
+  const dragEvent = useRef<DragEvent<Body> | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const prevDragPosition = useRef<{ x: number; y: number }>();
   const hoverTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -46,7 +45,7 @@ function DraggableViewSection({
   }, []);
 
   const dragoverHandler = useCallback((e: DragEvent<Body>) => {
-    dragEvent = e;
+    dragEvent.current = e;
   }, []);
 
   const onMouseLeave = useCallback(() => {
@@ -60,16 +59,23 @@ function DraggableViewSection({
   const handleDrag = useCallback(
     (_: DragEvent<HTMLDivElement | Body>) => {
       setTimeout(() => {
-        if (dragEvent && !(dragEvent?.clientX === 0 && dragEvent?.clientY === 0)) {
+        if (
+          dragEvent &&
+          !(
+            dragEvent.current?.clientX === 0 && dragEvent.current?.clientY === 0
+          ) &&
+          dragEvent.current?.clientX &&
+          dragEvent.current?.clientY
+        ) {
           if (prevDragPosition.current) {
             const dimensionChange = vertical
-              ? (dragEvent.clientY ?? 0) - prevDragPosition.current.y
-              : (dragEvent.clientX ?? 0) - prevDragPosition.current.x;
+              ? (dragEvent.current.clientY ?? 0) - prevDragPosition.current.y
+              : (dragEvent.current.clientX ?? 0) - prevDragPosition.current.x;
             onDimensionChange(dimensionChange);
           }
           prevDragPosition.current = {
-            x: dragEvent.clientX,
-            y: dragEvent.clientY,
+            x: dragEvent.current.clientX,
+            y: dragEvent.current.clientY,
           };
         }
       });
@@ -77,17 +83,26 @@ function DraggableViewSection({
     [onDimensionChange, vertical]
   );
 
-  const handleDragStart = useCallback((event: DragEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    prevDragPosition.current = { x: event.clientX, y: event.clientY };
-    document.body.addEventListener("dragover", dragoverHandler as any);
-  }, [dragoverHandler]);
+  const handleDragStart = useCallback(
+    (event: DragEvent<HTMLDivElement>) => {
+      setIsDragging(true);
+      prevDragPosition.current = { x: event.clientX, y: event.clientY };
+      document.body.addEventListener(
+        "dragover",
+        dragoverHandler as unknown as EventListener
+      );
+    },
+    [dragoverHandler]
+  );
 
   const handleDragEnd = useCallback(() => {
     prevDragPosition.current = undefined;
     setIsDragging(false);
-    document.body.removeEventListener("dragover", dragoverHandler as any);
-    dragEvent = null;
+    document.body.removeEventListener(
+      "dragover",
+      dragoverHandler as unknown as EventListener
+    );
+    dragEvent.current = null;
   }, [dragoverHandler]);
 
   const style = useMemo(
