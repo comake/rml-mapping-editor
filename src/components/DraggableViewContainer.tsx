@@ -41,7 +41,9 @@ function DraggableViewContainer<T extends number>({
       : containerRef.current?.offsetWidth;
 
     const usedDimensions = dimensions.reduce((sum: number, dim, index) => {
-      if (collapsedIndices.includes(index) || dim === undefined) return sum;
+      if (collapsedIndices.includes(index) || dim === undefined) {
+        return sum;
+      }
       if (dim === 0 && !collapsedIndices.includes(index))
         return sum + MINIMUM_DIMENSION;
       return sum + dim;
@@ -49,13 +51,16 @@ function DraggableViewContainer<T extends number>({
 
     const leftoverSpace = (totalContainerDimension ?? 0) - usedDimensions;
     const leftoverCount = dimensions.filter(
-      (dim, index) => dim === undefined || collapsedIndices.includes(index)
+      (dim, index) => dim === undefined
     ).length;
 
     const newDimensions = dimensions.map((dim, index) => {
-      if (collapsedIndices.includes(index)) return 0;
-      if (dim === 0 && !collapsedIndices.includes(index))
+      if (collapsedIndices.includes(index)) {
+        return 0;
+      }
+      if (dim === 0 && !collapsedIndices.includes(index)) {
         return MINIMUM_DIMENSION;
+      }
       return dim === undefined ? leftoverSpace / leftoverCount : dim;
     }) as unknown as FixedLengthArray<number, T>;
 
@@ -84,17 +89,22 @@ function DraggableViewContainer<T extends number>({
           uncollapsedItemsSpace +=
             defaultViewDimensions[index] ?? MINIMUM_DIMENSION;
         }
-        if (!collapsedIndices.includes(index) && (dim === undefined || dim > 0))
+        if (
+          !collapsedIndices.includes(index) &&
+          (dim === undefined || dim > 0)
+        ) {
           openItemsCount++;
+        }
       });
 
       // uncollapsedItemsCount includes both, the items that just opened and the ones that were open already. openItemsCount only includes the items that were open while some (or none) were collapsed.
       const uncollapsedItemsCount = dimensions.length - collapsedIndices.length;
 
       const newDimensions = dimensions.map((dim, index) => {
-        if (collapsedIndices.includes(index)) return 0;
+        if (collapsedIndices.includes(index)) {
+          return 0;
+        }
         if (dim === undefined) {
-          console.log("dim is undefined");
           return dim;
         }
         if (dim === 0 && !collapsedIndices.includes(index)) {
@@ -104,17 +114,8 @@ function DraggableViewContainer<T extends number>({
           dim +
           (collapsedItemsSpace ?? 0) / (uncollapsedItemsCount ?? 1) -
           uncollapsedItemsSpace / openItemsCount;
-        console.log({ newDim  });
         return newDim;
       }) as unknown as FixedLengthArray<number | undefined, T>;
-      console.log({
-        collapsedItemsSpace,
-        newDimensions,
-        collapsedIndices,
-        uncollapsedItemsCount,
-        openItemsCount,
-        uncollapsedItemsSpace,
-      });
       return newDimensions;
     });
   }, [collapsedIndices, defaultViewDimensions]);
@@ -124,7 +125,6 @@ function DraggableViewContainer<T extends number>({
   }, [collapsedIndices, handleCollapseChange]);
 
   useEffect(() => {
-    // console.log({ hasUndefinedDimensions, dimensions });
     if (containerRef.current && hasUndefinedDimensions) {
       updateDimensions();
     }
