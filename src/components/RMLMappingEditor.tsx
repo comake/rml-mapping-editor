@@ -35,10 +35,15 @@ const defaultMapping = {
   ]
 };
 
-const defaultInputFiles = [{
+const defaultInputFiles :InputFile[]= [{
   name: 'input.json',
   contents: DEFAULT_INPUT_FILE_BY_TYPE[INPUT_TYPES.json],
-}];
+},
+{
+  name: 'input.csv',
+  contents: DEFAULT_INPUT_FILE_BY_TYPE[INPUT_TYPES.csv],
+}
+];
 
 export function RMLMappingEditor() {
   const [theme, setTheme] = useState(THEMES.dark);
