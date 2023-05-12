@@ -13,3 +13,5 @@ Pick<TObj, Exclude<keyof TObj, ArrayLengthMutationKeys>>
 export type ValueOf<T> = T[keyof T];
 
 export type ClickEvent = React.MouseEvent<HTMLButtonElement>;
+
+export type PanelType = "input" | "editor" | "output";
