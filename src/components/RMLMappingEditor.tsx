@@ -16,50 +16,24 @@ import InputPanel from "./InputPanel";
 import OutputPanel from "./OutputPanel";
 import type { NodeObject } from "jsonld";
 import MappingContext from "../contexts/MappingContext";
-import InputContext, {
-  DEFAULT_INPUT_FILE_BY_TYPE,
-  INPUT_TYPES,
-  InputFile,
-} from "../contexts/InputContext";
+import InputContext, { InputFile } from "../contexts/InputContext";
 import OutputContext from "../contexts/OutputContext";
 import * as RMLMapper from "@comake/rmlmapper-js";
 import NewInputModal from "./NewInputModal";
+import { DEFAULT_INPUT_FILES, DEFAULT_MAPPING, PANEL_ORDER } from '../util/Constants';
 
 const BASE_PANEL_WIDTH = 400;
 const RUN_MAPPING_TIMEOUT_DURATION = 500;
 
-const defaultMapping = {
-  "@context": {
-    rr: "http://www.w3.org/ns/r2rml#",
-    rml: "http://semweb.mmlab.be/ns/rml#",
-  },
-  "@type": "http://www.w3.org/ns/r2rml#TriplesMap",
-  "rml:logicalSource": {
-    "@type": "rml:LogicalSource",
-    "rml:iterator": "$",
-    "rml:referenceFormulation": "http://semweb.mmlab.be/ns/ql#JSONPath",
-    "rml:source": "input.json",
-  },
-  "rr:subject": "https://example.com/mappingSubject",
-  "rr:predicateObjectMap": [],
-};
-
-const defaultInputFiles = [
-  {
-    name: "input.json",
-    contents: DEFAULT_INPUT_FILE_BY_TYPE[INPUT_TYPES.json],
-  },
-];
-
 export function RMLMappingEditor() {
   const [theme, setTheme] = useState(THEMES.dark);
-  const [mapping, setMapping] = useState<NodeObject>(defaultMapping);
+  const [mapping, setMapping] = useState<NodeObject>(DEFAULT_MAPPING);
   const [mappingError, setMappingError] = useState<Error>();
-  const [inputFiles, setInputFiles] = useState<InputFile[]>(defaultInputFiles);
+  const [inputFiles, setInputFiles] = useState<InputFile[]>(DEFAULT_INPUT_FILES);
   const [output, setOutput] = useState<NodeObject[]>();
   const runMappingTimeout = useRef<ReturnType<typeof setTimeout>>();
   const [addingNewInput, setAddingNewInput] = useState(false);
-  const [collapsed, setCollapsed] = useState<string[]>([]);
+  const [collapsed, setCollapsed] = useState<PanelType[]>([]);
 
   const themeContext = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
@@ -120,52 +94,45 @@ export function RMLMappingEditor() {
       RUN_MAPPING_TIMEOUT_DURATION
     );
   }, [inputFiles, mapping]);
-  const collapseItem = (panelToCollapse: PanelType) => {
-    setCollapsed((curr) => [...curr, panelToCollapse]);
-  };
 
-  const {
-    panelOrder,
-    Panels,
-  }: { panelOrder: PanelType[]; Panels: Record<PanelType, ReactNode> } =
-    useMemo(
-      () => ({
-        panelOrder: ["input", "editor", "output"] as PanelType[],
-        Panels: {
-          input: (
-            <InputPanel addNewInput={addNewInput} collapse={collapseItem} />
-          ),
-          editor: <EditorPanel />,
-          output: <OutputPanel collapse={collapseItem} />,
-        },
-      }),
-      [addNewInput]
-    );
+  const panels = useMemo<Record<PanelType, ReactNode>>(
+    () => ({
+      input: <InputPanel addNewInput={addNewInput} />,
+      editor: <EditorPanel />,
+      output: <OutputPanel />,
+    }),
+    [addNewInput]
+  );
 
   const content = useMemo(
     () =>
-      panelOrder.map((key) => {
+      PANEL_ORDER.map((key) => {
         if (collapsed.includes(key)) {
           return (<div></div>) as ReactNode;
         }
-        return Panels[key] as ReactNode;
+        return panels[key] as ReactNode;
       }) as unknown as FixedLengthArray<ReactNode, 3>,
-    [collapsed, Panels, panelOrder]
+    [collapsed, panels]
   );
 
-  const unCollapse = useCallback(
-    (item: string) => {
-      setCollapsed((curr) => curr.filter((panelName) => panelName !== item));
+  const togglePanelCollapse = useCallback(
+    (panelName: PanelType) => {
+      setCollapsed((prevCollapsedPanels) => {
+        if (prevCollapsedPanels.includes(panelName)) {
+          return prevCollapsedPanels.filter((collapsedPanel) => collapsedPanel !== panelName)
+        }
+        return [...prevCollapsedPanels, panelName];
+      });
     },
     [setCollapsed]
   );
   const collapsedIndices = useMemo(() => {
     const resIndices: number[] = [];
-    panelOrder.forEach((item, index) => {
+    PANEL_ORDER.forEach((item, index) => {
       if (collapsed.includes(item)) resIndices.push(index);
     });
     return resIndices;
-  }, [collapsed, panelOrder]);
+  }, [collapsed]);
 
   return (
     <ThemeContext.Provider value={themeContext}>
@@ -179,7 +146,7 @@ export function RMLMappingEditor() {
                   : styles.rmlEditorLight
               }
             >
-              <Header collapsedItems={collapsed} unCollapse={unCollapse} />
+              <Header collapsedItems={collapsed} togglePanelCollapse={togglePanelCollapse} />
               <DraggableViewContainer
                 defaultViewDimensions={defaultBodyWidths}
                 viewContent={content}

@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import InputContext, { INPUT_TYPES } from "../contexts/InputContext";
+import InputContext from "../contexts/InputContext";
 import styles from "../css/RMLMappingEditor.module.scss";
 import CodeEditor from "./CodeEditor";
 import { ReactComponent as PlusIcon } from "../images/plus.svg";
 import { ReactComponent as DownArrow } from "../images/down-arrow.svg";
-import { PanelType } from "../util/TypeUtil";
+import { INPUT_TYPES } from '../util/Constants';
 
 const views = {
   inputs: "Input Files",
@@ -13,10 +13,9 @@ const views = {
 
 export interface InputPanelProps {
   addNewInput: () => void;
-  collapse: (collapseItem: PanelType) => void;
 }
 
-function InputPanel({ addNewInput, collapse }: InputPanelProps) {
+function InputPanel({ addNewInput }: InputPanelProps) {
   const [view, setView] = useState(views.inputs);
   const { inputFiles, setInputFiles } = useContext(InputContext);
   const [selectedInputFileIndex, setSelectedInputFileIndex] =
@@ -81,27 +80,21 @@ function InputPanel({ addNewInput, collapse }: InputPanelProps) {
       <div className={styles.panelHeader}>
         <button
           onClick={changeToInputView}
-          className={`${styles.panelHeaderButton} ${
-            view === views.inputs ? styles.panelHeaderButtonSelected : ""
+          className={`${styles.headerButton} ${
+            view === views.inputs ? styles.headerButtonSelected : ""
           }`}
         >
           Input Files
         </button>
         <div className={styles.stretch}></div>
         <button
-          onClick={collapse.bind(null, "input")}
-          className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton} ${styles.collapsePanelButtonLeft}`}
-        >
-          <DownArrow />
-        </button>
-        <button
           onClick={addNewInput}
-          className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton}`}
+          className={`${styles.headerButton} ${styles.iconHeaderButton}`}
         >
           <PlusIcon />
         </button>
-        {/* <button onClick={changeToJSONInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.json ? styles.panelHeaderButtonSelected : ''}`}>JSON</button>
-        <button onClick={changeToXMLInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.xml ? styles.panelHeaderButtonSelected : ''}`}>XML</button> */}
+        {/* <button onClick={changeToJSONInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.json ? styles.headerButtonSelected : ''}`}>JSON</button>
+        <button onClick={changeToXMLInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.xml ? styles.headerButtonSelected : ''}`}>XML</button> */}
       </div>
       {!selectedInputFile && (
         <div className={styles.inputFilesList}>
@@ -123,7 +116,7 @@ function InputPanel({ addNewInput, collapse }: InputPanelProps) {
           <div className={styles.panelHeader}>
             <button
               onClick={closeSelectedInputFile}
-              className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton}`}
+              className={`${styles.headerButton} ${styles.iconHeaderButton}`}
             >
               <DownArrow className={styles.backArrow} />
             </button>

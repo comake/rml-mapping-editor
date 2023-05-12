@@ -7,7 +7,8 @@ import { githubLight } from "@uiw/codemirror-theme-github";
 import { oneDark } from '@codemirror/theme-one-dark';
 import { linter, lintGutter } from '@codemirror/lint';
 import ThemeContext, { THEMES } from '../contexts/ThemeContext';
-import { INPUT_TYPES, InputType } from '../contexts/InputContext';
+import { INPUT_TYPES } from '../util/Constants';
+import { InputType } from '../util/TypeUtil';
 
 export type CodeEditorProps = {
   code?: string;

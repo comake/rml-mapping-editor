@@ -1,29 +1,22 @@
 import ThemeToggle from './ThemeToggle';
 import styles from '../css/RMLMappingEditor.module.scss';
 import { ReactElement } from 'react';
+import { PanelType } from '../util/TypeUtil';
+import TogglePanelButton from './TogglePanelButton';
+import { PANELS } from '../util/Constants';
+
 interface HeaderProps {
   collapsedItems: Array<string | { name: string; icon: ReactElement }>;
-  unCollapse: (item: string) => void;
+  togglePanelCollapse: (item: PanelType) => void;
 }
 
-function Header({ collapsedItems, unCollapse }: HeaderProps) {
+function Header({ togglePanelCollapse }: HeaderProps) {
   return (
     <div className={styles.header}>
+      <TogglePanelButton toggle={togglePanelCollapse} panelName={PANELS.input} />
       <div className={styles.logo}>RML Mapping Editor</div>
-      {collapsedItems.map((item) => {
-        const name = typeof item === 'string' ? item : item.name;
-        const icon = typeof item === 'string' ? null : item.icon;
-        return (
-          <button
-            key={name}
-            onClick={unCollapse.bind(null, name)}
-            className={`${styles.panelHeaderButton}`}
-          >
-            {icon ?? `${name[0].toUpperCase()}${name.slice(1)} Panel`}
-          </button>
-        );
-      })}
       <ThemeToggle />
+      <TogglePanelButton toggle={togglePanelCollapse} panelName={PANELS.output} />
     </div>
   );
 }
