@@ -1,4 +1,4 @@
-import {
+import React, {
   ReactNode,
   useCallback,
   useEffect,
@@ -74,29 +74,25 @@ function DraggableViewContainer<T extends number>({
 
   const handleCollapseChange = useCallback(() => {
     setDimensions((dimensions) => {
-      let collapsedItemsSpace = 0;
       // Space occupied by items that were previously collapsed and have now been opened
-      let uncollapsedItemsSpace = 0;
-      let openItemsCount = 0;
+      const uncollapsedDims: { index: number; dim: number }[] = [];
+      const collapsedDims: { index: number; dim: number }[] = [];
       dimensions.forEach((dim, index) => {
         if (collapsedIndices.includes(index) && dim !== undefined && dim > 0) {
-          collapsedItemsSpace += dim;
+          collapsedDims.push({ index, dim: dim ?? 0 });
         } else if (!collapsedIndices.includes(index) && dim === 0) {
-          uncollapsedItemsSpace +=
-            defaultViewDimensions[index] ?? MINIMUM_DIMENSION;
-        }
-        if (
-          !collapsedIndices.includes(index) &&
-          (dim === undefined || dim > 0)
-        ) {
-          openItemsCount++;
+          uncollapsedDims.push({
+            index,
+            dim: defaultViewDimensions[index] ?? MINIMUM_DIMENSION,
+          });
         }
       });
 
       // uncollapsedItemsCount includes both, the items that just opened and the ones that were open already. openItemsCount only includes the items that were open while some (or none) were collapsed.
-      const uncollapsedItemsCount = dimensions.length - collapsedIndices.length;
-
-      const newDimensions = dimensions.map((dim, index) => {
+      // const uncollapsedItemsCount = dimensions.length - collapsedIndices.length;
+      let remToReduce = 0;
+      const frozenDimIndices: number[] = [];
+      let newDimensions = dimensions.map((dim, index) => {
         if (collapsedIndices.includes(index)) {
           return 0;
         }
@@ -106,12 +102,39 @@ function DraggableViewContainer<T extends number>({
         if (dim === 0 && !collapsedIndices.includes(index)) {
           return defaultViewDimensions[index] ?? MINIMUM_DIMENSION;
         }
-        const newDim =
-          dim +
-          (collapsedItemsSpace ?? 0) / (uncollapsedItemsCount ?? 1) -
-          uncollapsedItemsSpace / openItemsCount;
+        let toReduce = remToReduce,
+          toAdd = 0;
+        const nextUncollapsed = uncollapsedDims.find(
+          (uncollapsed) => uncollapsed.index - 1 === index
+        );
+        const nextCollapsed = collapsedDims.find(
+          (collapsed) => collapsed.index - 1 === index
+        );
+
+        if (nextUncollapsed) {
+          // Make sure the panel being shrunk is at least MINIMUM_DIMENSION in width
+          if (nextUncollapsed.dim + remToReduce <= dim - MINIMUM_DIMENSION) {
+            toReduce += nextUncollapsed.dim;
+          } else {
+            remToReduce += MINIMUM_DIMENSION;
+            toReduce = dim - MINIMUM_DIMENSION;
+            frozenDimIndices.push(index);
+          }
+        } else if (nextCollapsed) {
+          toAdd += nextCollapsed.dim;
+        }
+
+        const newDim = dim + toAdd - toReduce;
         return newDim;
       }) as unknown as FixedLengthArray<number | undefined, T>;
+      if (remToReduce) {
+        const reduceFromCount = dimensions.length - frozenDimIndices.length;
+        newDimensions = newDimensions.map((dim, index) =>
+          typeof dim === 'number' && !frozenDimIndices.includes(index)
+            ? dim - remToReduce / reduceFromCount
+            : dim
+        ) as unknown as FixedLengthArray<number | undefined, T>;
+      }
       return newDimensions;
     });
   }, [collapsedIndices, defaultViewDimensions]);
@@ -158,7 +181,7 @@ function DraggableViewContainer<T extends number>({
 
   const handleDimensionChange = useCallback(
     (changedIndex: number, dimensionChange: number) => {
-      let canApplyDimensionChange =
+      const canApplyDimensionChange =
         (dimensions[changedIndex] ?? 0) + dimensionChange > MINIMUM_DIMENSION &&
         (dimensions[changedIndex + 1] ?? 0) - dimensionChange >
           MINIMUM_DIMENSION;
