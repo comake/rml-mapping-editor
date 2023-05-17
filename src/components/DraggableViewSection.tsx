@@ -5,9 +5,9 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { OrArray } from "../util/TypeUtil";
-import styles from "../css/RMLMappingEditor.module.scss";
+} from 'react';
+import { OrArray } from '../util/TypeUtil';
+import styles from '../css/RMLMappingEditor.module.scss';
 
 const DRAG_HOVER_TIMEOUT_DURATION = 380;
 
@@ -30,7 +30,7 @@ function DraggableViewSection({
   isLast,
   onDimensionChange,
 }: DraggableViewSectionProps) {
-  const dragEvent = useRef<DragEvent<Body> | null>(null);
+  const dragEvent = useRef<DragEvent<Body>>();
   const [isDragging, setIsDragging] = useState(false);
   const prevDragPosition = useRef<{ x: number; y: number }>();
   const hoverTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -61,9 +61,6 @@ function DraggableViewSection({
       setTimeout(() => {
         if (
           dragEvent &&
-          !(
-            dragEvent.current?.clientX === 0 && dragEvent.current?.clientY === 0
-          ) &&
           dragEvent.current?.clientX &&
           dragEvent.current?.clientY
         ) {
@@ -88,7 +85,7 @@ function DraggableViewSection({
       setIsDragging(true);
       prevDragPosition.current = { x: event.clientX, y: event.clientY };
       document.body.addEventListener(
-        "dragover",
+        'dragover',
         dragoverHandler as unknown as EventListener
       );
     },
@@ -99,27 +96,27 @@ function DraggableViewSection({
     prevDragPosition.current = undefined;
     setIsDragging(false);
     document.body.removeEventListener(
-      "dragover",
+      'dragover',
       dragoverHandler as unknown as EventListener
     );
-    dragEvent.current = null;
+    dragEvent.current = undefined;
   }, [dragoverHandler]);
 
   const style = useMemo(
     () =>
       dimensionsComputed
         ? ({
-            position: "absolute",
-            width: vertical ? "100%" : dimension,
-            left: vertical ? "0px" : offset,
-            height: vertical ? dimension : "100%",
-            top: vertical ? offset : "0px",
+            position: 'absolute',
+            width: vertical ? '100%' : dimension,
+            left: vertical ? '0px' : offset,
+            height: vertical ? dimension : '100%',
+            top: vertical ? offset : '0px',
           } as const)
         : ({
-            position: "relative",
+            position: 'relative',
             flex: dimension ? undefined : 1,
-            width: vertical ? "100%" : dimension,
-            height: vertical ? dimension : "100%",
+            width: vertical ? '100%' : dimension,
+            height: vertical ? dimension : '100%',
           } as const),
     [dimensionsComputed, vertical, dimension, offset]
   );
@@ -127,8 +124,8 @@ function DraggableViewSection({
   return (
     <div
       className={`${styles.draggableViewSection} ${
-        isDragging ? styles.dragging : ""
-      } ${hasLongHovered ? styles.dragHandleLongHover : ""}`}
+        isDragging ? styles.dragging : ''
+      } ${hasLongHovered ? styles.dragHandleLongHover : ''}`}
       style={style}
     >
       {children}
