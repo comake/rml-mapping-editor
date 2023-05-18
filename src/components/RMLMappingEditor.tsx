@@ -95,24 +95,13 @@ export function RMLMappingEditor() {
     );
   }, [inputFiles, mapping]);
 
-  const panels = useMemo<Record<PanelType, ReactNode>>(
-    () => ({
-      input: <InputPanel addNewInput={addNewInput} />,
-      editor: <EditorPanel />,
-      output: <OutputPanel />,
-    }),
+  const panels = useMemo<FixedLengthArray<ReactNode, 3>>(
+    () => ([
+      <InputPanel addNewInput={addNewInput} />,
+      <EditorPanel />,
+      <OutputPanel />,
+    ]) as unknown as FixedLengthArray<ReactNode, 3>,
     [addNewInput]
-  );
-
-  const content = useMemo(
-    () =>
-      PANEL_ORDER.map((key) => {
-        if (collapsed.includes(key)) {
-          return (<div></div>) as ReactNode;
-        }
-        return panels[key] as ReactNode;
-      }) as unknown as FixedLengthArray<ReactNode, 3>,
-    [collapsed, panels]
   );
 
   const togglePanelCollapse = useCallback(
@@ -126,7 +115,7 @@ export function RMLMappingEditor() {
     },
     [setCollapsed]
   );
-  const collapsedIndices = useMemo(() => {
+  const collapsedIndicies = useMemo(() => {
     const resIndices: number[] = [];
     PANEL_ORDER.forEach((item, index) => {
       if (collapsed.includes(item)) resIndices.push(index);
@@ -149,9 +138,9 @@ export function RMLMappingEditor() {
               <Header collapsedItems={collapsed} togglePanelCollapse={togglePanelCollapse} />
               <DraggableViewContainer
                 defaultViewDimensions={defaultBodyWidths}
-                viewContent={content}
+                viewContent={panels}
                 additionalClasses={[styles.body]}
-                collapsedIndices={collapsedIndices}
+                collapsedIndicies={collapsedIndicies}
               />
               {addingNewInput && <NewInputModal close={closeNewInputModal} />}
             </div>

@@ -122,6 +122,10 @@
   position: relative;
 }
 
+.draggableViewSection {
+  overflow: hidden;
+}
+
 .draggableViewSection .draggableViewContainer {
   height: 100%;
   width: 100%;
@@ -230,6 +234,7 @@
   font-size: 13px;
   margin-right: 2px;
   height: 24px;
+  white-space: nowrap;
 }
 
 .iconHeaderButton {
