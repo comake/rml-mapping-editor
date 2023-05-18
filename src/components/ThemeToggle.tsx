@@ -17,7 +17,7 @@ function ThemeToggle() {
   }, [setTheme, theme]);
   
   return (
-    <button onClick={toggleTheme} className={styles.themeToggle}>
+    <button onClick={toggleTheme} className={`${styles.headerButton} ${styles.iconHeaderButton} ${styles.themeToggle}`}>
       { theme === THEMES.dark ? <SunIcon /> : <MoonIcon /> }
     </button>
   )

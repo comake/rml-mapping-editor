@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import InputContext, { INPUT_TYPES } from '../../contexts/InputContext';
+import InputContext from '../../contexts/InputContext';
 import styles from '../../css/RMLMappingEditor.module.scss';
 import CodeEditor from '../CodeEditor';
 import { ReactComponent as PlusIcon } from '../../images/plus.svg';
@@ -13,6 +13,7 @@ import { ReactComponent as DownArrow } from '../../images/down-arrow.svg';
 import ViewButton from './ViewButton';
 import { ViewType } from '../../util/TypeUtil';
 import InputItem from './InputItem';
+import { INPUT_TYPES } from '../../util/Constants';
 
 const views: Record<ViewType, string> = {
   [ViewType.INPUTS]: 'Input Files',
@@ -102,7 +103,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
   return (
     <div className={styles.inputPanel}>
       <div className={styles.panelHeader}>
-        {/* <button onClick={changeToInputView} className={`${styles.panelHeaderButton} ${view === views.inputs ? styles.panelHeaderButtonSelected : ''}`}>Input Files</button> */}
+        {/* <button onClick={changeToInputView} className={`${styles.headerButton} ${view === views.inputs ? styles.headerButtonSelected : ''}`}>Input Files</button> */}
         {Object.keys(views).map((viewType) => (
           <ViewButton
             key={viewType}
@@ -116,12 +117,12 @@ function InputPanel({ addNewInput }: InputPanelProps) {
         <div className={styles.stretch}></div>
         <button
           onClick={addNewInput}
-          className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton}`}
+          className={`${styles.headerButton} ${styles.iconHeaderButton}`}
         >
           <PlusIcon />
         </button>
-        {/* <button onClick={changeToJSONInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.json ? styles.panelHeaderButtonSelected : ''}`}>JSON</button>
-        <button onClick={changeToXMLInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.xml ? styles.panelHeaderButtonSelected : ''}`}>XML</button> */}
+        {/* <button onClick={changeToJSONInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.json ? styles.headerButtonSelected : ''}`}>JSON</button>
+        <button onClick={changeToXMLInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.xml ? styles.headerButtonSelected : ''}`}>XML</button> */}
       </div>
 
       {!selectedInputFile && view === 'inputs' && (
@@ -154,7 +155,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
           <div className={styles.panelHeader}>
             <button
               onClick={closeSelectedInputFile}
-              className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton}`}
+              className={`${styles.headerButton} ${styles.iconHeaderButton}`}
             >
               <DownArrow className={styles.backArrow} />
             </button>

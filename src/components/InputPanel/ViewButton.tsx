@@ -15,8 +15,8 @@ function ViewButton({ name, onClick, isSelected, children }: ViewButtonProps) {
 
   return (
     <button
-      className={`${styles.panelHeaderButton} ${
-        isSelected ? styles.panelHeaderButtonSelected : ''
+      className={`${styles.headerButton} ${
+        isSelected ? styles.headerButtonSelected : ''
       }`}
       onClick={handleClick}
     >

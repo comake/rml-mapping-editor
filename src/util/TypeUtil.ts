@@ -1,3 +1,5 @@
+import { INPUT_TYPES, PANELS } from './Constants';
+
 export type OrArray<T> = T | T[];
 
 type ArrayLengthMutationKeys = 'splice' | 'push' | 'pop' | 'shift' |  'unshift';
@@ -18,3 +20,6 @@ export enum ViewType {
   INPUTS = 'inputs',
   FUNCTIONS = 'functions',
 }
+export type PanelType = ValueOf<typeof PANELS>;
+
+export type InputType = ValueOf<typeof INPUT_TYPES>;
