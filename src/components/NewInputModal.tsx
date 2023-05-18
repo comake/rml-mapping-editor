@@ -1,7 +1,9 @@
 import Modal from './Modal';
 import styles from '../css/RMLMappingEditor.module.scss';
 import { useCallback, useContext } from 'react';
-import InputContext, { DEFAULT_INPUT_FILE_BY_TYPE, INPUT_TYPES, InputType } from '../contexts/InputContext';
+import InputContext from '../contexts/InputContext';
+import { DEFAULT_INPUT_FILE_BY_TYPE, INPUT_TYPES } from '../util/Constants';
+import { InputType } from '../util/TypeUtil';
 
 export interface NewInputModalProps {
   close: () => void;

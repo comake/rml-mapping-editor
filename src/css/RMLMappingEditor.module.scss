@@ -14,11 +14,11 @@
 .rmlEditorDark {
   composes: rmlEditor;
   color-scheme: dark;
-  
+
   --header-icon-color: rgb(227, 230, 234);
   --secondary-icon-color: rgb(84, 88, 93);
   --primary-icon-color: rgb(142, 146, 150);
-  
+
   --primary-text-color: rgb(215, 218, 224);
   --secondary-text-color: #abb2bf;
   --tertiary-text-color: rgba(215, 218, 224, 0.5);
@@ -122,6 +122,10 @@
   position: relative;
 }
 
+.draggableViewSection {
+  overflow: hidden;
+}
+
 .draggableViewSection .draggableViewContainer {
   height: 100%;
   width: 100%;
@@ -133,18 +137,18 @@
 
 .draggableViewSection::after {
   z-index: 2;
-  content: '';
+  content: "";
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 
-.draggableViewSection .dragHandle, 
+.draggableViewSection .dragHandle,
 .draggableViewSection::after {
   position: absolute;
   background-color: transparent;
 }
 
-.draggableViewSection.dragHandleLongHover::after, 
+.draggableViewSection.dragHandleLongHover::after,
 .draggableViewSection.dragging::after {
   background-color: var(--context-menu-border-color);
 }
@@ -163,7 +167,7 @@
 
 .draggableViewContainer:not(.vertical) {
   .draggableViewSection > .dragHandle,
-  .draggableViewSection.dragHandleLongHover::after, 
+  .draggableViewSection.dragHandleLongHover::after,
   .draggableViewSection.dragging::after {
     height: 100%;
     right: -3px;
@@ -175,7 +179,7 @@
 
 .panel {
   background-color: var(--side-panel-background-color);
-  height:100%;
+  height: 100%;
 }
 
 .stretch {
@@ -197,26 +201,11 @@
 }
 
 .themeToggle {
-  composes: centered;
-  background: none;
-  border: none;
-  outline: none;
-  height: 26px;
-  width: 26px;
-  border-radius: 50%;
-  justify-content: center;
   margin-left: 15px;
 }
 
-.themeToggle:hover {
-  background-color: var(--button-hover-color);
-}
-
 .themeToggle svg {
-  height: 16px;
-  width: 16px;
-  fill: var(--header-icon-color);
-  stroke: var(--header-icon-color);
+  stroke: var(--primary-icon-color);
 }
 
 .mappingEditor {
@@ -229,45 +218,46 @@
   display: flex;
   align-items: center;
   width: 100%;
-  height:32px;
+  height: 32px;
   padding: 0 6px;
   border-bottom: 1px solid var(--header-border-color);
 }
 
-.panelHeaderButton {
+.headerButton {
   background-color: transparent;
   outline: none;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  padding: 0 5px;
+  padding: 0 6px;
   color: var(--secondary-text-color);
   font-size: 13px;
   margin-right: 2px;
-  height: 22px;
+  height: 24px;
+  white-space: nowrap;
 }
 
-.iconPanelHeaderButton {
+.iconHeaderButton {
   padding: 0;
-  width: 22px;
+  width: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.panelHeaderButton:hover {
+.headerButton:hover {
   background-color: var(--button-hover-color);
 }
 
-.panelHeaderButtonSelected {
+.headerButtonSelected {
   background-color: var(--button-selected-color) !important;
   color: var(--button-selected-text-color) !important;
 }
 
-.panelHeaderButton svg {
+.headerButton svg {
   fill: var(--primary-icon-color);
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .mappingError {
@@ -275,7 +265,7 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  height:32px;
+  height: 32px;
   padding: 0 10px;
   font-size: 13px;
   color: var(--warning-text-color);
@@ -300,7 +290,7 @@
   padding: 8px;
 }
 
-.inputFile  {
+.inputFile {
   cursor: pointer;
   padding: 7px 10px;
   border-radius: 5px;
@@ -332,7 +322,7 @@
   top: 0;
   bottom: 0;
   z-index: 101;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -349,10 +339,10 @@
   flex-direction: column;
   background-color: var(--main-background-color);
   border: 1px solid var(--dropdown-border-color);
-
 }
 
-.modalHeader, .modalFooter {
+.modalHeader,
+.modalFooter {
   padding: 20px 20px 15px 20px;
   display: flex;
   align-items: center;
@@ -416,6 +406,16 @@
 
   &:hover {
     background-color: var(--button-selected-color);
-    color: var(--button-selected-text-color)
+    color: var(--button-selected-text-color);
   }
 }
+
+.collapsePanelButtonLeft {
+  margin-right: 10px;
+}
+
+.collapsePanelButtonRight {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+

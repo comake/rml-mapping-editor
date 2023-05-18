@@ -1,3 +1,5 @@
+import { INPUT_TYPES, PANELS } from './Constants';
+
 export type OrArray<T> = T | T[];
 
 type ArrayLengthMutationKeys = 'splice' | 'push' | 'pop' | 'shift' |  'unshift';
@@ -13,3 +15,7 @@ Pick<TObj, Exclude<keyof TObj, ArrayLengthMutationKeys>>
 export type ValueOf<T> = T[keyof T];
 
 export type ClickEvent = React.MouseEvent<HTMLButtonElement>;
+
+export type PanelType = ValueOf<typeof PANELS>;
+
+export type InputType = ValueOf<typeof INPUT_TYPES>;
