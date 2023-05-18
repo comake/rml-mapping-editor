@@ -77,7 +77,6 @@ function DraggableViewContainer<T extends number>({
   const handleCollapseChange = useCallback(() => {
     const newlyCollapsedIndicies = collapsedIndicies.filter((index) => !prevCollapsedIndicies.includes(index));
     const newwlyUncollapsedIndicies = prevCollapsedIndicies.filter((index) => !collapsedIndicies.includes(index));
-
     const newDimensions = dimensions.map((dimension, index): number => {
       // Maintain the dimension of collapsed sections so that when they're opened they use the previous dimension
       if (collapsedIndicies.includes(index)) {
@@ -87,16 +86,16 @@ function DraggableViewContainer<T extends number>({
         return defaultViewDimensions[index] ?? MINIMUM_DIMENSION;
       }
       if (newwlyUncollapsedIndicies.includes(index - 1)) {
-        const prevDimension = dimensions[index - 1] ?? defaultViewDimensions[index - 1] ?? MINIMUM_DIMENSION
+        const prevDimension = dimensions[index - 1] ?? defaultViewDimensions[index - 1] ?? MINIMUM_DIMENSION;
         return Math.max(MINIMUM_DIMENSION, dimension - prevDimension);
       } else if (newwlyUncollapsedIndicies.includes(index + 1)) {
-        const nextDimension = dimensions[index + 1] ?? defaultViewDimensions[index + 1] ?? MINIMUM_DIMENSION
+        const nextDimension = dimensions[index + 1] ?? defaultViewDimensions[index + 1] ?? MINIMUM_DIMENSION;
         return Math.max(MINIMUM_DIMENSION, dimension - nextDimension);
       } if (newlyCollapsedIndicies.includes(index - 1)) {
-        const prevDimension = dimensions[index - 1] ?? defaultViewDimensions[index - 1] ?? MINIMUM_DIMENSION
+        const prevDimension = dimensions[index - 1] ?? defaultViewDimensions[index - 1] ?? MINIMUM_DIMENSION;
         return dimension + prevDimension;
       } else if (newlyCollapsedIndicies.includes(index + 1)) {
-        const nextDimension = dimensions[index + 1] ?? defaultViewDimensions[index + 1] ?? MINIMUM_DIMENSION
+        const nextDimension = dimensions[index + 1] ?? defaultViewDimensions[index + 1] ?? MINIMUM_DIMENSION;
         return dimension + nextDimension;
       }
       return dimension;
