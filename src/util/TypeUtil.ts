@@ -16,6 +16,10 @@ export type ValueOf<T> = T[keyof T];
 
 export type ClickEvent = React.MouseEvent<HTMLButtonElement>;
 
+export enum ViewType {
+  INPUTS = 'inputs',
+  FUNCTIONS = 'functions',
+}
 export type PanelType = ValueOf<typeof PANELS>;
 
 export type InputType = ValueOf<typeof INPUT_TYPES>;

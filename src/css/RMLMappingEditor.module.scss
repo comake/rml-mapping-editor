@@ -97,7 +97,6 @@
   justify-content: center;
 }
 
-
 .header {
   composes: centered;
   padding: 0 10px;
@@ -284,13 +283,13 @@
   overflow: auto;
 }
 
-.inputFilesList {
+.inputItemsList {
   composes: stretch;
   overflow: auto;
   padding: 8px;
 }
 
-.inputFile {
+.inputItem {
   cursor: pointer;
   padding: 7px 10px;
   border-radius: 5px;
@@ -302,11 +301,11 @@
   color: var(--secondary-text-color);
 }
 
-.inputFile:hover {
+.inputItem:hover {
   background-color: var(--explorer-item-hover-color);
 }
 
-.inputFile.Selected {
+.inputItem.Selected {
   background-color: var(--explorer-item-selected-color);
   color: var(--primary-text-color);
 }
@@ -410,6 +409,10 @@
   }
 }
 
+.functionsListHeader {
+  color: var(--button-selected-text-color);
+  padding: 8px 12px;
+}
 .collapsePanelButtonLeft {
   margin-right: 10px;
 }

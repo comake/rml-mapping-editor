@@ -1,22 +1,47 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import InputContext from "../contexts/InputContext";
-import styles from "../css/RMLMappingEditor.module.scss";
-import CodeEditor from "./CodeEditor";
-import { ReactComponent as PlusIcon } from "../images/plus.svg";
-import { ReactComponent as DownArrow } from "../images/down-arrow.svg";
-import { INPUT_TYPES } from '../util/Constants';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import InputContext from '../../contexts/InputContext';
+import styles from '../../css/RMLMappingEditor.module.scss';
+import CodeEditor from '../CodeEditor';
+import { ReactComponent as PlusIcon } from '../../images/plus.svg';
+import { ReactComponent as DownArrow } from '../../images/down-arrow.svg';
+import ViewButton from './ViewButton';
+import { ViewType } from '../../util/TypeUtil';
+import InputItem from './InputItem';
+import { INPUT_TYPES } from '../../util/Constants';
 
-const views = {
-  inputs: "Input Files",
-  // functions: 'Functions',
+const views: Record<ViewType, string> = {
+  [ViewType.INPUTS]: 'Input Files',
+  [ViewType.FUNCTIONS]: 'Functions',
 };
+// type ViewType = keyof typeof views;
+
+const functionList = [
+  {
+    name: 'Capitalize',
+    function: (str: string) => str.toUpperCase(),
+  },
+  {
+    name: 'Lower case',
+    function: (str: string) => str.toLowerCase(),
+  },
+  {
+    name: 'Concatenate',
+    function: (strList: string[], delimiter: '-') => strList.join(delimiter),
+  },
+];
 
 export interface InputPanelProps {
   addNewInput: () => void;
 }
 
 function InputPanel({ addNewInput }: InputPanelProps) {
-  const [view, setView] = useState(views.inputs);
+  const [view, setView] = useState<ViewType>(ViewType.INPUTS);
   const { inputFiles, setInputFiles } = useContext(InputContext);
   const [selectedInputFileIndex, setSelectedInputFileIndex] =
     useState<number>();
@@ -33,17 +58,17 @@ function InputPanel({ addNewInput }: InputPanelProps) {
 
   const inputType = useMemo(() => {
     if (selectedInputFile) {
-      if (selectedInputFile.name.endsWith(".json")) {
+      if (selectedInputFile.name.endsWith('.json')) {
         return INPUT_TYPES.json;
-      } else if (selectedInputFile.name.endsWith(".xml")) {
+      } else if (selectedInputFile.name.endsWith('.xml')) {
         return INPUT_TYPES.xml;
-      } else if (selectedInputFile.name.endsWith(".csv")) {
+      } else if (selectedInputFile.name.endsWith('.csv')) {
         return INPUT_TYPES.csv;
       }
     }
   }, [selectedInputFile]);
 
-  const changeToInputView = useCallback(() => setView(views.inputs), [setView]);
+  const changeView = useCallback((view: ViewType) => setView(view), [setView]);
 
   const updateSelectedInputFile = useCallback(
     (input: string) => {
@@ -78,14 +103,17 @@ function InputPanel({ addNewInput }: InputPanelProps) {
   return (
     <div className={styles.inputPanel}>
       <div className={styles.panelHeader}>
-        <button
-          onClick={changeToInputView}
-          className={`${styles.headerButton} ${
-            view === views.inputs ? styles.headerButtonSelected : ""
-          }`}
-        >
-          Input Files
-        </button>
+        {/* <button onClick={changeToInputView} className={`${styles.headerButton} ${view === views.inputs ? styles.headerButtonSelected : ''}`}>Input Files</button> */}
+        {Object.keys(views).map((viewType) => (
+          <ViewButton
+            key={viewType}
+            name={viewType as ViewType}
+            onClick={changeView}
+            isSelected={view === viewType}
+          >
+            {views[viewType as ViewType]}
+          </ViewButton>
+        ))}
         <div className={styles.stretch}></div>
         <button
           onClick={addNewInput}
@@ -96,19 +124,30 @@ function InputPanel({ addNewInput }: InputPanelProps) {
         {/* <button onClick={changeToJSONInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.json ? styles.headerButtonSelected : ''}`}>JSON</button>
         <button onClick={changeToXMLInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.xml ? styles.headerButtonSelected : ''}`}>XML</button> */}
       </div>
-      {!selectedInputFile && (
-        <div className={styles.inputFilesList}>
+
+      {!selectedInputFile && view === 'inputs' && (
+        <div className={styles.inputItemsList}>
           {inputFiles.map((inputFile, index) => {
             return (
-              <div
+              <InputItem
                 key={index}
-                className={styles.inputFile}
-                onClick={setSelectedInputFileIndex.bind(null, index)}
+                index={index}
+                onClick={setSelectedInputFileIndex}
               >
                 {inputFile.name}
-              </div>
+              </InputItem>
             );
           })}
+        </div>
+      )}
+      {view === 'functions' && (
+        <div className={styles.inputItemsList}>
+          <div className={styles.functionsListHeader}>Sample function list</div>
+          {functionList.map((fn) => (
+            <div className={styles.inputItem} key={fn.name}>
+              {fn.name}
+            </div>
+          ))}
         </div>
       )}
       {selectedInputFile && (
@@ -127,7 +166,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
           <CodeEditor
             key={selectedInputFileIndex}
             mode={inputType}
-            code={selectedInputFile.contents ?? ""}
+            code={selectedInputFile.contents ?? ''}
             onChange={updateSelectedInputFile}
             classes={styles.mappingEditorCodeView}
           />
