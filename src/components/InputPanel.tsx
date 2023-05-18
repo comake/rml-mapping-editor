@@ -7,7 +7,7 @@ import { ReactComponent as DownArrow } from '../images/down-arrow.svg';
 import InputFileEditor from './InputFileEditor';
 
 const views = {
-  inputs: 'Input Files',
+  inputs: "Input Files",
   // functions: 'Functions',
 };
 
@@ -80,8 +80,8 @@ function InputPanel({ addNewInput }: InputPanelProps) {
       <div className={styles.panelHeader}>
         <button
           onClick={changeToInputView}
-          className={`${styles.panelHeaderButton} ${
-            view === views.inputs ? styles.panelHeaderButtonSelected : ''
+          className={`${styles.headerButton} ${
+            view === views.inputs ? styles.headerButtonSelected : ''
           }`}
         >
           Input Files
@@ -89,18 +89,19 @@ function InputPanel({ addNewInput }: InputPanelProps) {
         <div className={styles.stretch}></div>
         <button
           onClick={addNewInput}
-          className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton}`}
+          className={`${styles.headerButton} ${styles.iconHeaderButton}`}
         >
           <PlusIcon />
         </button>
-        {/* <button onClick={changeToJSONInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.json ? styles.panelHeaderButtonSelected : ''}`}>JSON</button>
-        <button onClick={changeToXMLInput} className={`${styles.panelHeaderButton} ${inputType === INPUT_TYPES.xml ? styles.panelHeaderButtonSelected : ''}`}>XML</button> */}
+        {/* <button onClick={changeToJSONInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.json ? styles.headerButtonSelected : ''}`}>JSON</button>
+        <button onClick={changeToXMLInput} className={`${styles.headerButton} ${inputType === INPUT_TYPES.xml ? styles.headerButtonSelected : ''}`}>XML</button> */}
       </div>
       {!selectedInputFile && (
         <div className={styles.inputFilesList}>
           {inputFiles.map((inputFile, index) => {
             return (
               <div
+                key={index}
                 className={styles.inputFile}
                 onClick={setSelectedInputFileIndex.bind(null, index)}
               >
@@ -115,7 +116,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
           <div className={styles.panelHeader}>
             <button
               onClick={closeSelectedInputFile}
-              className={`${styles.panelHeaderButton} ${styles.iconPanelHeaderButton}`}
+              className={`${styles.headerButton} ${styles.iconHeaderButton}`}
             >
               <DownArrow className={styles.backArrow} />
             </button>

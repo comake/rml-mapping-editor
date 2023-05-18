@@ -127,6 +127,10 @@
   position: relative;
 }
 
+.draggableViewSection {
+  overflow: hidden;
+}
+
 .draggableViewSection .draggableViewContainer {
   height: 100%;
   width: 100%;
@@ -138,7 +142,7 @@
 
 .draggableViewSection::after {
   z-index: 2;
-  content: '';
+  content: "";
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
@@ -202,26 +206,11 @@
 }
 
 .themeToggle {
-  composes: centered;
-  background: none;
-  border: none;
-  outline: none;
-  height: 26px;
-  width: 26px;
-  border-radius: 50%;
-  justify-content: center;
   margin-left: 15px;
 }
 
-.themeToggle:hover {
-  background-color: var(--button-hover-color);
-}
-
 .themeToggle svg {
-  height: 16px;
-  width: 16px;
-  fill: var(--header-icon-color);
-  stroke: var(--header-icon-color);
+  stroke: var(--primary-icon-color);
 }
 
 .mappingEditor {
@@ -239,40 +228,41 @@
   border-bottom: 1px solid var(--header-border-color);
 }
 
-.panelHeaderButton {
+.headerButton {
   background-color: transparent;
   outline: none;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  padding: 0 5px;
+  padding: 0 6px;
   color: var(--secondary-text-color);
   font-size: 13px;
   margin-right: 2px;
-  height: 22px;
+  height: 24px;
+  white-space: nowrap;
 }
 
-.iconPanelHeaderButton {
+.iconHeaderButton {
   padding: 0;
-  width: 22px;
+  width: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.panelHeaderButton:hover {
+.headerButton:hover {
   background-color: var(--button-hover-color);
 }
 
-.panelHeaderButtonSelected {
+.headerButtonSelected {
   background-color: var(--button-selected-color) !important;
   color: var(--button-selected-text-color) !important;
 }
 
-.panelHeaderButton svg {
+.headerButton svg {
   fill: var(--primary-icon-color);
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .mappingError {
@@ -479,3 +469,12 @@
   outline: none;
   width: fit-content;
 }
+.collapsePanelButtonLeft {
+  margin-right: 10px;
+}
+
+.collapsePanelButtonRight {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+

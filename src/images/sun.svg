@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="528" height="528" viewBox="0 0 528 528">
-  <g fill="none" fill-rule="evenodd" transform="translate(14 14)">
-    <path stroke-width="28" d="M348.95288,250 C348.95288,304.652042 304.649843,348.95288 250,348.95288 C195.350157,348.95288 151.04712,304.649843 151.04712,250 C151.04712,195.350157 195.350157,151.04712 250,151.04712 C304.649843,151.04712 348.95288,195.350157 348.95288,250"/>
-    <path stroke-linecap="round" stroke-width="28" d="M286.649215,37.434555 L213.350785,37.434555" transform="rotate(90 250 37.435)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M286.649215,462.565445 L213.350785,462.565445" transform="rotate(90 250 462.565)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M499.21466,250 L425.91623,250" transform="rotate(180 462.565 250)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M74.0837696,250 L0.785340314,250" transform="rotate(180 37.435 250)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M441.242849,95.4014413 L367.945115,95.4014413" transform="rotate(135 404.594 95.401)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M132.054367,404.594234 L58.7566331,404.594234" transform="rotate(135 95.405 404.594)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M441.242849,404.593716 L367.945115,404.593716" transform="rotate(-135 404.594 404.594)"/>
-    <path stroke-linecap="round" stroke-width="28" d="M132.054367,95.405766 L58.7566331,95.405766" transform="rotate(-135 95.405 95.406)"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="536" height="536" viewBox="0 0 536 536">
+  <g fill="none" fill-rule="evenodd" stroke="#979797" stroke-width="36" transform="translate(18 18)">
+    <path d="M348.95288,250 C348.95288,304.652042 304.649843,348.95288 250,348.95288 C195.350157,348.95288 151.04712,304.649843 151.04712,250 C151.04712,195.350157 195.350157,151.04712 250,151.04712 C304.649843,151.04712 348.95288,195.350157 348.95288,250"/>
+    <path stroke-linecap="round" d="M286.64966,37.435 L213.35123,37.435" transform="rotate(90 250 37.435)"/>
+    <path stroke-linecap="round" d="M286.64877,462.565 L213.35034,462.565" transform="rotate(90 250 462.565)"/>
+    <path stroke-linecap="round" d="M499.21377,250 L425.91534,250" transform="rotate(180 462.565 250)"/>
+    <path stroke-linecap="round" d="M74.0846597,250 L0.7862304,250" transform="rotate(180 37.435 250)"/>
+    <path stroke-linecap="round" d="M441.242568,95.4006752 L367.944834,95.4006752" transform="rotate(135 404.594 95.4)"/>
+    <path stroke-linecap="round" d="M132.053348,404.594188 L58.755614,404.594188" transform="rotate(135 95.404 404.594)"/>
+    <path stroke-linecap="round" d="M441.242679,404.594214 L367.944945,404.594214" transform="rotate(-135 404.594 404.594)"/>
+    <path stroke-linecap="round" d="M132.053348,95.4058119 L58.755614,95.4058119" transform="rotate(-135 95.404 95.406)"/>
   </g>
 </svg>
