@@ -9,6 +9,12 @@
   * {
     box-sizing: border-box;
   }
+
+  button {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .rmlEditorDark {
@@ -96,7 +102,6 @@
   align-items: center;
   justify-content: center;
 }
-
 
 .header {
   composes: centered;
@@ -410,6 +415,60 @@
   }
 }
 
+.addTableItemContainer {
+  display: flex;
+  justify-content: end;
+  padding: 8px;
+}
+
+.addTableItem {
+  color: var(--primary-text-color);
+  border: none;
+  border-radius: 5px;
+  background: none;
+
+  &:hover {
+    background-color: var(--button-hover-color);
+    color: var(--button-selected-text-color);
+  }
+}
+.actionsCell{
+  background: var(--header-background-color);
+}
+
+.csvEditorTable {
+  color: var(--primary-text-color);
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  td:not(.actionsCell) {
+    border: 1px solid var(--secondary-text-color);
+  }
+
+  tr:nth-child(even) {
+    background: var(--button-hover-color);
+  }
+}
+
+.tableheader {
+  font-weight: 600;
+}
+
+.cell {
+  padding: 4px 8px;
+}
+
+.tableActionsContainer {
+  width: fit-content;
+  display: flex;
+  margin: 0 auto;
+}
+
+.tableItemInput {
+  border: none;
+  outline: none;
+  width: fit-content;
+}
 .collapsePanelButtonLeft {
   margin-right: 10px;
 }

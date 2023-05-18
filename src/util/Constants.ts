@@ -31,6 +31,10 @@ export const DEFAULT_INPUT_FILES = [
     name: "input.json",
     contents: DEFAULT_INPUT_FILE_BY_TYPE[INPUT_TYPES.json],
   },
+  {
+    name: "input.csv",
+    contents: DEFAULT_INPUT_FILE_BY_TYPE[INPUT_TYPES.csv],
+  },
 ];
 
 export const PANELS = {

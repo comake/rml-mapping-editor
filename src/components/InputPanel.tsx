@@ -1,10 +1,10 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import InputContext from "../contexts/InputContext";
-import styles from "../css/RMLMappingEditor.module.scss";
-import CodeEditor from "./CodeEditor";
-import { ReactComponent as PlusIcon } from "../images/plus.svg";
-import { ReactComponent as DownArrow } from "../images/down-arrow.svg";
-import { INPUT_TYPES } from '../util/Constants';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import InputContext from '../contexts/InputContext';
+import styles from '../css/RMLMappingEditor.module.scss';
+// import CodeEditor from './CodeEditor';
+import { ReactComponent as PlusIcon } from '../images/plus.svg';
+import { ReactComponent as DownArrow } from '../images/down-arrow.svg';
+import InputFileEditor from './InputFileEditor';
 
 const views = {
   inputs: "Input Files",
@@ -31,17 +31,17 @@ function InputPanel({ addNewInput }: InputPanelProps) {
     inputFiles.length
   );
 
-  const inputType = useMemo(() => {
-    if (selectedInputFile) {
-      if (selectedInputFile.name.endsWith(".json")) {
-        return INPUT_TYPES.json;
-      } else if (selectedInputFile.name.endsWith(".xml")) {
-        return INPUT_TYPES.xml;
-      } else if (selectedInputFile.name.endsWith(".csv")) {
-        return INPUT_TYPES.csv;
-      }
-    }
-  }, [selectedInputFile]);
+  // const inputType = useMemo(() => {
+  //   if (selectedInputFile) {
+  //     if (selectedInputFile.name.endsWith('.json')) {
+  //       return INPUT_TYPES.json;
+  //     } else if (selectedInputFile.name.endsWith('.xml')) {
+  //       return INPUT_TYPES.xml;
+  //     } else if (selectedInputFile.name.endsWith('.csv')) {
+  //       return INPUT_TYPES.csv;
+  //     }
+  //   }
+  // }, [selectedInputFile]);
 
   const changeToInputView = useCallback(() => setView(views.inputs), [setView]);
 
@@ -81,7 +81,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
         <button
           onClick={changeToInputView}
           className={`${styles.headerButton} ${
-            view === views.inputs ? styles.headerButtonSelected : ""
+            view === views.inputs ? styles.headerButtonSelected : ''
           }`}
         >
           Input Files
@@ -124,12 +124,9 @@ function InputPanel({ addNewInput }: InputPanelProps) {
               {selectedInputFile.name}
             </div>
           </div>
-          <CodeEditor
-            key={selectedInputFileIndex}
-            mode={inputType}
-            code={selectedInputFile.contents ?? ""}
-            onChange={updateSelectedInputFile}
-            classes={styles.mappingEditorCodeView}
+          <InputFileEditor
+            inputFile={selectedInputFile}
+            onFileContentsChange={updateSelectedInputFile}
           />
         </>
       )}
