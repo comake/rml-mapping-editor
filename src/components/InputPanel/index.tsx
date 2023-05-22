@@ -4,21 +4,20 @@ import React, {
   useEffect,
   useMemo,
   useState,
-} from "react";
-import InputContext from "../../contexts/InputContext";
-import { GREL } from "@comake/rmlmapper-js";
-import styles from "../../css/RMLMappingEditor.module.scss";
-import CodeEditor from "../CodeEditor";
-import { ReactComponent as PlusIcon } from "../../images/plus.svg";
-import { ReactComponent as DownArrow } from "../../images/down-arrow.svg";
-import ViewButton from "./ViewButton";
-import { ViewType } from "../../util/TypeUtil";
-import InputItem from "./InputItem";
-import { INPUT_TYPES, functions } from "../../util/Constants";
+} from 'react';
+import InputContext from '../../contexts/InputContext';
+import styles from '../../css/RMLMappingEditor.module.scss';
+import CodeEditor from '../CodeEditor';
+import { ReactComponent as PlusIcon } from '../../images/plus.svg';
+import { ReactComponent as DownArrow } from '../../images/down-arrow.svg';
+import ViewButton from './ViewButton';
+import { InputViewType } from '../../util/TypeUtil';
+import InputItem from './InputItem';
+import { INPUT_TYPES, functions } from '../../util/Constants';
 
-const views: Record<ViewType, string> = {
-  [ViewType.INPUTS]: "Input Files",
-  [ViewType.FUNCTIONS]: "Functions",
+const views: Record<InputViewType, string> = {
+  [InputViewType.INPUTS]: 'Input Files',
+  [InputViewType.FUNCTIONS]: 'Functions',
 };
 // type ViewType = keyof typeof views;
 
@@ -27,11 +26,10 @@ export interface InputPanelProps {
 }
 
 function InputPanel({ addNewInput }: InputPanelProps) {
-  const [view, setView] = useState<ViewType>(ViewType.INPUTS);
+  const [view, setView] = useState<InputViewType>(InputViewType.INPUTS);
   const { inputFiles, setInputFiles } = useContext(InputContext);
   const [selectedInputFileIndex, setSelectedInputFileIndex] =
     useState<number>();
-  console.log({ GREL });
   const selectedInputFile = useMemo(
     () =>
       selectedInputFileIndex !== undefined
@@ -55,7 +53,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
     }
   }, [selectedInputFile]);
 
-  const changeView = useCallback((view: ViewType) => setView(view), [setView]);
+  const changeView = useCallback((view: InputViewType) => setView(view), [setView]);
 
   const updateSelectedInputFile = useCallback(
     (input: string) => {
@@ -94,11 +92,11 @@ function InputPanel({ addNewInput }: InputPanelProps) {
         {Object.keys(views).map((viewType) => (
           <ViewButton
             key={viewType}
-            name={viewType as ViewType}
+            name={viewType as InputViewType}
             onClick={changeView}
             isSelected={view === viewType}
           >
-            {views[viewType as ViewType]}
+            {views[viewType as InputViewType]}
           </ViewButton>
         ))}
         <div className={styles.stretch}></div>
