@@ -23,3 +23,12 @@ export enum ViewType {
 export type PanelType = ValueOf<typeof PANELS>;
 
 export type InputType = ValueOf<typeof INPUT_TYPES>;
+
+
+export type Params = Record<string, { type?: string; comment?: string }>;
+
+export type Functions = Record<
+  string,
+  { name: string; params: Params; description?: string }
+  // TODO: Once all functions are properly defined, make type, comment and description mandatory
+>;

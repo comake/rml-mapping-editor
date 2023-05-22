@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import InputContext from "../../contexts/InputContext";
+import { GREL } from "@comake/rmlmapper-js";
 import styles from "../../css/RMLMappingEditor.module.scss";
 import CodeEditor from "../CodeEditor";
 import { ReactComponent as PlusIcon } from "../../images/plus.svg";
@@ -13,28 +14,13 @@ import { ReactComponent as DownArrow } from "../../images/down-arrow.svg";
 import ViewButton from "./ViewButton";
 import { ViewType } from "../../util/TypeUtil";
 import InputItem from "./InputItem";
-import { INPUT_TYPES } from "../../util/Constants";
+import { INPUT_TYPES, functions } from "../../util/Constants";
 
 const views: Record<ViewType, string> = {
   [ViewType.INPUTS]: "Input Files",
   [ViewType.FUNCTIONS]: "Functions",
 };
 // type ViewType = keyof typeof views;
-
-const functionList = [
-  {
-    name: "Capitalize",
-    function: (str: string) => str.toUpperCase(),
-  },
-  {
-    name: "Lower case",
-    function: (str: string) => str.toLowerCase(),
-  },
-  {
-    name: "Concatenate",
-    function: (strList: string[], delimiter: "-") => strList.join(delimiter),
-  },
-];
 
 export interface InputPanelProps {
   addNewInput: () => void;
@@ -45,6 +31,7 @@ function InputPanel({ addNewInput }: InputPanelProps) {
   const { inputFiles, setInputFiles } = useContext(InputContext);
   const [selectedInputFileIndex, setSelectedInputFileIndex] =
     useState<number>();
+  console.log({ GREL });
   const selectedInputFile = useMemo(
     () =>
       selectedInputFileIndex !== undefined
@@ -143,11 +130,33 @@ function InputPanel({ addNewInput }: InputPanelProps) {
       {view === "functions" && (
         <div className={styles.inputItemsList}>
           <div className={styles.functionsListHeader}>Sample function list</div>
-          {functionList.map((fn) => (
-            <div className={styles.inputItem} key={fn.name}>
-              {fn.name}
-            </div>
-          ))}
+          {Object.keys(functions).map((fn) => {
+            const fnKey = fn as keyof typeof functions;
+            const func = functions[fnKey];
+            const props = Object.keys(func.params);
+            const propExp = props.map(
+              (prop) =>
+                `${
+                  func.params[prop as keyof typeof func.params].type ?? ""
+                } - ${
+                  func.params[prop as keyof typeof func.params].comment ?? ""
+                }`
+            );
+            return (
+              <div className={styles.inputItem} key={fnKey}>
+                {func.name}
+                <br />
+                {propExp.map((item) => (
+                  <React.Fragment key={item}>
+                    <span className={styles.inputItemComment} title={item}>
+                      {item}
+                    </span>
+                    <br />
+                  </React.Fragment>
+                ))}
+              </div>
+            );
+          })}
         </div>
       )}
       {selectedInputFile && (
