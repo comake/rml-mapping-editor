@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, useCallback } from 'react';
-import { ViewType } from '../../util/TypeUtil';
+import { InputViewType } from '../../util/TypeUtil';
 import styles from '../../css/RMLMappingEditor.module.scss';
 
 interface ViewButtonProps extends PropsWithChildren {
-  name: ViewType;
-  onClick: (name: ViewType) => void;
+  name: InputViewType;
+  onClick: (name: InputViewType) => void;
   isSelected: boolean;
 }
 

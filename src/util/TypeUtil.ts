@@ -14,7 +14,7 @@ export type ValueOf<T> = T[keyof T];
 
 export type ClickEvent = React.MouseEvent<HTMLButtonElement>;
 
-export enum ViewType {
+export enum InputViewType {
   INPUTS = 'inputs',
   FUNCTIONS = 'functions',
 }
